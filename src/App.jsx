@@ -621,7 +621,7 @@ captchaBox: {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    gap: 20,
+    gap: 24,
   },
   brand: {
     display: "flex",
@@ -726,7 +726,7 @@ fontSize: "clamp(2.2rem, 8vw, 5.5rem)",
   marginTop: 28,
   display: "flex",
   flexDirection: "column",
-  gap: 14,
+  gap: 24,
 },
   primaryButton: {
   display: "inline-flex",
@@ -879,13 +879,13 @@ pinkCardLarge: {
 twoCol: {
   display: "grid",
   gridTemplateColumns: "1fr",
-  gap: 18,
+  gap: 24,
   marginTop: 36,
 },
  cardGrid3: {
   display: "grid",
   gridTemplateColumns: "1fr",
-  gap: 18,
+  gap: 24,
   marginTop: 36,
 },
   darkCard: {
@@ -918,7 +918,7 @@ twoCol: {
  skillsGrid: {
   display: "grid",
   gridTemplateColumns: "1fr 1fr",
-  gap: 14,
+  gap: 20,
   marginTop: 36,
 },
 skillBox: {
@@ -966,6 +966,6 @@ contactGrid: {
  contactButtons: {
   display: "flex",
   flexDirection: "column",
-  gap: 14,
+  gap: 20,
 },
 };
