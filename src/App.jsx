@@ -507,15 +507,37 @@ text="These are the key skills I am developing as a Business Admin Apprentice to
               </div>
             </div>
           </motion.div>
-        </section>
+               </section>
       </main>
-</div>
-)}
+    </div>
+  )}
 </>
 );
 }
 
 const styles = {
+  captchaOverlay: {
+  position: "fixed",
+  inset: 0,
+  zIndex: 9999,
+  background: "rgba(9,11,16,0.92)",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  padding: 24,
+},
+
+captchaBox: {
+  width: "100%",
+  maxWidth: 560,
+  borderRadius: 30,
+  border: "1px solid rgba(255,255,255,0.10)",
+  background: "rgba(255,255,255,0.05)",
+  padding: 40,
+  backdropFilter: "blur(22px)",
+  boxShadow: "0 20px 50px rgba(0,0,0,0.20)",
+  textAlign: "center",
+},
   page: {
     minHeight: "100vh",
     overflowX: "hidden",
