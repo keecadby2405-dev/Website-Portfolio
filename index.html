@@ -1,38 +1,180 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>RAF Air Cadets 2504 Squadron</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keelie Cadby - Business Administration Portfolio</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Welcome to RAF Air Cadets 2504 Squadron</h1>
-        <nav>
-            <ul>
-                <li><a href="#about">About Us</a></li>
-                <li><a href="#events">Events</a></li>
-                <li><a href="#join">Join Us</a></li>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">KC</div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#goals" class="nav-link">Goals</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
             </ul>
-        </nav>
-    </header>
-    <main>
-        <section id="about">
-            <h2>About Us</h2>
-            <p>We are the RAF Air Cadets 2504 Squadron, dedicated to youth development through aviation.</p>
-        </section>
-        <section id="events">
-            <h2>Upcoming Events</h2>
-            <ul>
-                <li>Annual Parade - March 15</li>
-                <li>Summer Camp - July 1-7</li>
-            </ul>
-        </section>
-        <section id="join">
-            <h2>Join Us</h2>
-            <p>Become a member of our squadron and start your adventure today!</p>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2026 RAF Air Cadets 2504 Squadron. All Rights Reserved.</p>
+        </div>
+    </nav>
+
+    <!-- Hero Carousel Slider -->
+    <section id="home" class="hero">
+        <div class="carousel">
+            <div class="carousel-slide active" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="slide-content">
+                    <div class="slide-badge">Business Administration</div>
+                    <h1 class="slide-title">Keelie Cadby</h1>
+                    <p class="slide-subtitle">Aspiring Business Leader & Administrator</p>
+                    <p class="slide-description">Building strong organisational and communication skills in the care industry</p>
+                    <a href="#contact" class="btn btn-primary">Connect With Me</a>
+                </div>
+            </div>
+
+            <div class="carousel-slide" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                <div class="slide-content">
+                    <div class="slide-badge">Apprentice</div>
+                    <h1 class="slide-title">Professional Growth</h1>
+                    <p class="slide-subtitle">Supporting Day-to-Day Operations</p>
+                    <p class="slide-description">Developing expertise in organisation, communication, and administrative excellence</p>
+                    <a href="#skills" class="btn btn-primary">View My Skills</a>
+                </div>
+            </div>
+
+            <div class="carousel-slide" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                <div class="slide-content">
+                    <div class="slide-badge">Career Goals</div>
+                    <h1 class="slide-title">Future Vision</h1>
+                    <p class="slide-subtitle">From Administrator to Entrepreneur</p>
+                    <p class="slide-description">Progressing toward team leadership and building my own business</p>
+                    <a href="#goals" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+
+            <!-- Carousel Controls -->
+            <button class="carousel-btn prev" onclick="changeSlide(-1)">&#10094;</button>
+            <button class="carousel-btn next" onclick="changeSlide(1)">&#10095;</button>
+
+            <!-- Carousel Indicators -->
+            <div class="carousel-indicators">
+                <span class="indicator active" onclick="currentSlide(0)"></span>
+                <span class="indicator" onclick="currentSlide(1)"></span>
+                <span class="indicator" onclick="currentSlide(2)"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>I am a <strong>Business Administration Apprentice</strong> developing strong organisational, communication, and administrative skills in a professional environment. I support day-to-day business operations and enjoy working efficiently to help teams run smoothly.</p>
+                    <p>Currently working in the <strong>care industry</strong>, I have gained valuable experience in supporting operations, managing communications, and maintaining records. I am motivated to learn, grow, and build a successful career in business administration.</p>
+                    <p>My passion for organisation, teamwork, and continuous improvement drives me to excel in every task I undertake. I am committed to delivering quality support and making a meaningful impact in any organisation I join.</p>
+                </div>
+                <div class="about-highlight">
+                    <div class="highlight-box">
+                        <h3>Current Role</h3>
+                        <p>Business Administration Apprentice</p>
+                    </div>
+                    <div class="highlight-box">
+                        <h3>Industry</h3>
+                        <p>Care Sector</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+        <div class="container">
+            <h2 class="section-title">My Skills</h2>
+            <p class="section-subtitle">Core competencies developed through apprenticeship and professional experience</p>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <div class="skill-icon">📊</div>
+                    <h3>Organisation & Time Management</h3>
+                    <p>Efficiently managing tasks, priorities, and schedules to ensure smooth operations and timely delivery of work.</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">💬</div>
+                    <h3>Communication</h3>
+                    <p>Professional communication across email, phone, and face-to-face interactions with strong teamwork and collaboration skills.</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">💻</div>
+                    <h3>Microsoft Office Suite</h3>
+                    <p>Proficient in Word, Excel, and Outlook for document creation, data analysis, and professional communications.</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">📋</div>
+                    <h3>Data Entry & Record Keeping</h3>
+                    <p>Accurate data entry and meticulous record management to maintain organised and accessible information systems.</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🤝</div>
+                    <h3>Customer Service</h3>
+                    <p>Providing excellent service with professionalism, empathy, and a commitment to meeting customer needs.</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🎯</div>
+                    <h3>Professional Development</h3>
+                    <p>Continuously learning and improving skills to excel in administration and support team success.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Career Goals Section -->
+    <section id="goals" class="goals">
+        <div class="container">
+            <h2 class="section-title">Career Goals & Vision</h2>
+            <div class="goals-timeline">
+                <div class="goal-item">
+                    <div class="goal-stage">Stage 1</div>
+                    <h3>Excel as Administrator</h3>
+                    <p>Master all aspects of business administration, build strong relationships with colleagues, and become an integral part of the team.</p>
+                </div>
+                <div class="goal-item">
+                    <div class="goal-stage">Stage 2</div>
+                    <h3>Progress to Team Leader</h3>
+                    <p>Develop leadership skills and progress into a team leader or management position where I can lead, support, and guide others to success.</p>
+                </div>
+                <div class="goal-item">
+                    <div class="goal-stage">Stage 3</div>
+                    <h3>Establish My Own Business</h3>
+                    <p>Apply my experience and knowledge to create something meaningful and successful. Build a business that reflects my values and contributes positively to society.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Let's Connect</h2>
+            <p class="section-subtitle">I'd love to hear from you. Connect with me on LinkedIn or reach out for opportunities and collaborations.</p>
+            <div class="contact-content">
+                <a href="https://www.linkedin.com/in/keelie-cadby-967321337/" class="btn btn-primary" target="_blank">
+                    Connect on LinkedIn
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Keelie Cadby. All Rights Reserved. | Business Administration Apprentice in the Care Industry</p>
+        </div>
     </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
