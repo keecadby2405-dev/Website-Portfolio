@@ -1,180 +1,639 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keelie Cadby - Business Administration Portfolio</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Keelie Cadby | Business Administration Apprentice</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --soft: #1f2937;
+      --card: rgba(255, 255, 255, 0.06);
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --accent: #a78bfa;
+      --accent-2: #f472b6;
+      --line: rgba(255, 255, 255, 0.12);
+      --shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+      --radius: 24px;
+      --max: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(167, 139, 250, 0.18), transparent 30%),
+        radial-gradient(circle at top right, rgba(244, 114, 182, 0.12), transparent 25%),
+        linear-gradient(180deg, #0b1120 0%, #0f172a 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(11, 17, 32, 0.72);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+    }
+
+    .brand {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .nav-links a:hover,
+    .btn-secondary:hover {
+      color: var(--text);
+    }
+
+    .hero {
+      padding: 88px 0 72px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.9fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .hero-copy,
+    .hero-panel,
+    .section-card,
+    .timeline-item,
+    .skill,
+    .contact-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-copy {
+      padding: 40px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #ddd6fe;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 6vw, 4.8rem);
+      line-height: 0.98;
+      margin: 0 0 18px;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-copy p {
+      font-size: 1.06rem;
+      color: var(--muted);
+      max-width: 62ch;
+      margin: 0 0 28px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+
+    .btn,
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 14px 22px;
+      font-weight: 600;
+      transition: 0.2s ease;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      opacity: 0.95;
+    }
+
+    .btn-secondary {
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .hero-points {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .point {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .point strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.98rem;
+    }
+
+    .point span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .hero-panel {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .panel-label {
+      color: #ddd6fe;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .panel-title {
+      font-size: 1.7rem;
+      line-height: 1.15;
+      margin: 8px 0 0;
+    }
+
+    .panel-copy {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .mini-stat {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .mini-stat strong {
+      display: block;
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+    }
+
+    section {
+      padding: 24px 0 72px;
+    }
+
+    .section-header {
+      margin-bottom: 24px;
+    }
+
+    .section-header span {
+      display: inline-block;
+      margin-bottom: 10px;
+      color: #ddd6fe;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.8rem;
+    }
+
+    .section-header h2 {
+      margin: 0;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      letter-spacing: -0.03em;
+    }
+
+    .section-card {
+      padding: 32px;
+    }
+
+    .about-grid,
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
+    }
+
+    .about-text p,
+    .contact-card p {
+      color: var(--muted);
+      margin-top: 0;
+    }
+
+    .quote {
+      padding: 22px;
+      border-left: 3px solid var(--accent);
+      background: rgba(255,255,255,0.04);
+      border-radius: 18px;
+      color: #e9d5ff;
+      margin-top: 22px;
+    }
+
+    .journey {
+      display: grid;
+      gap: 18px;
+    }
+
+    .timeline-item {
+      padding: 22px;
+    }
+
+    .timeline-item h3,
+    .experience-card h3,
+    .contact-card h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 1.15rem;
+    }
+
+    .timeline-item p,
+    .experience-card p,
+    .experience-card li,
+    .contact-card li,
+    .skill p {
+      color: var(--muted);
+    }
+
+    .experience-grid,
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .experience-card,
+    .skill,
+    .contact-card {
+      padding: 26px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .role {
+      color: #ddd6fe;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    ul {
+      padding-left: 18px;
+      margin-bottom: 0;
+    }
+
+    .skill h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    .contact-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .contact-list li {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    footer {
+      padding: 24px 0 50px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      text-align: center;
+    }
+
+    @media (max-width: 920px) {
+      .hero-grid,
+      .about-grid,
+      .contact-grid,
+      .experience-grid,
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-points {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-inner {
+        gap: 16px;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-copy,
+      .hero-panel,
+      .section-card,
+      .experience-card,
+      .skill,
+      .contact-card,
+      .timeline-item {
+        padding: 22px;
+      }
+
+      .hero {
+        padding-top: 64px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">KC</div>
-            <ul class="nav-menu">
-                <li><a href="#home" class="nav-link">Home</a></li>
-                <li><a href="#about" class="nav-link">About</a></li>
-                <li><a href="#skills" class="nav-link">Skills</a></li>
-                <li><a href="#goals" class="nav-link">Goals</a></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="brand">Keelie Cadby</div>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#experience">Experience</a>
+        <a href="#skills">Skills</a>
+        <a href="#goals">Goals</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">Business Administration Apprentice</span>
+        <h1>Building a strong future in business, leadership, and care.</h1>
+        <p>
+          I am a Business Administration Apprentice in the care industry, developing strong organisational,
+          communication, and administrative skills while working towards future leadership and business goals.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn" href="#contact">Get in touch</a>
+          <a class="btn-secondary" href="#about">Learn more</a>
+        </div>
+
+        <div class="hero-points">
+          <div class="point">
+            <strong>Organised</strong>
+            <span>Focused on keeping day-to-day operations efficient and well managed.</span>
+          </div>
+          <div class="point">
+            <strong>Resilient</strong>
+            <span>Proud of the progress I have made through life’s challenges.</span>
+          </div>
+          <div class="point">
+            <strong>Ambitious</strong>
+            <span>Aiming for leadership roles and one day running my own business.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-panel">
+        <div>
+          <div class="panel-label">Professional Profile</div>
+          <h2 class="panel-title">Aspiring Team Leader, Manager, and Future Business Owner</h2>
+        </div>
+
+        <p class="panel-copy">
+          I bring a positive attitude, a strong work ethic, and a genuine desire to keep learning,
+          improving, and making a meaningful contribution in every role I take on.
+        </p>
+
+        <div class="mini-stat">
+          <strong>Current Industry</strong>
+          <span>Care sector administration and operational support.</span>
+        </div>
+
+        <div class="mini-stat">
+          <strong>Long-Term Direction</strong>
+          <span>Leadership, management, and building a business of my own.</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="about">
+      <div class="container about-grid">
+        <div class="section-card about-text">
+          <div class="section-header">
+            <span>About Me</span>
+            <h2>A motivated apprentice with a strong mindset and clear goals.</h2>
+          </div>
+
+          <p>
+            I am currently working as a Business Administration Apprentice in the care industry, where I am
+            building valuable experience in organisation, communication, administration, and supporting
+            efficient day-to-day operations.
+          </p>
+
+          <p>
+            Throughout my life and education, I have faced challenges that have strengthened my resilience,
+            determination, and work ethic. I take real pride in how far I have come, and I use those experiences
+            as motivation to keep moving forward and aiming higher.
+          </p>
+
+          <p>
+            I am focused on continuing to grow professionally, contribute positively to the people around me,
+            and build a successful future in leadership, management, and business.
+          </p>
+
+          <div class="quote">
+            “My journey has not always been easy, but it has made me stronger, more focused, and determined to succeed.”
+          </div>
+        </div>
+
+        <div class="journey">
+          <div class="timeline-item">
+            <h3>Where I Started</h3>
+            <p>
+              I have overcome personal and educational struggles that could have held me back, but instead they helped shape my character and drive.
+            </p>
+          </div>
+
+          <div class="timeline-item">
+            <h3>Where I Am Now</h3>
+            <p>
+              I am doing well in life, building experience in a professional role, and growing in confidence, responsibility, and ambition.
+            </p>
+          </div>
+
+          <div class="timeline-item">
+            <h3>Where I’m Going</h3>
+            <p>
+              I am aiming high, with goals of progressing into a team leader or management role and eventually running my own business.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience">
+      <div class="container">
+        <div class="section-header">
+          <span>Experience</span>
+          <h2>Professional strengths I am developing in my current role.</h2>
+        </div>
+
+        <div class="experience-grid">
+          <div class="experience-card">
+            <div class="role">Business Administration Apprentice · Care Industry</div>
+            <h3>Day-to-day administration and operational support</h3>
+            <ul>
+              <li>Supporting administrative tasks in a professional care environment.</li>
+              <li>Helping to keep records, information, and processes organised and accurate.</li>
+              <li>Communicating effectively with colleagues and contributing to team efficiency.</li>
+              <li>Developing confidence in handling responsibility and supporting daily operations.</li>
             </ul>
+          </div>
+
+          <div class="experience-card">
+            <div class="role">Personal Growth & Professional Development</div>
+            <h3>Building a foundation for future leadership</h3>
+            <ul>
+              <li>Strengthening resilience, discipline, and a positive working mindset.</li>
+              <li>Learning how strong administration supports people, services, and team success.</li>
+              <li>Developing the confidence to take on bigger responsibilities over time.</li>
+              <li>Working towards future roles in leadership, management, and business.</li>
+            </ul>
+          </div>
         </div>
-    </nav>
-
-    <!-- Hero Carousel Slider -->
-    <section id="home" class="hero">
-        <div class="carousel">
-            <div class="carousel-slide active" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                <div class="slide-content">
-                    <div class="slide-badge">Business Administration</div>
-                    <h1 class="slide-title">Keelie Cadby</h1>
-                    <p class="slide-subtitle">Aspiring Business Leader & Administrator</p>
-                    <p class="slide-description">Building strong organisational and communication skills in the care industry</p>
-                    <a href="#contact" class="btn btn-primary">Connect With Me</a>
-                </div>
-            </div>
-
-            <div class="carousel-slide" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                <div class="slide-content">
-                    <div class="slide-badge">Apprentice</div>
-                    <h1 class="slide-title">Professional Growth</h1>
-                    <p class="slide-subtitle">Supporting Day-to-Day Operations</p>
-                    <p class="slide-description">Developing expertise in organisation, communication, and administrative excellence</p>
-                    <a href="#skills" class="btn btn-primary">View My Skills</a>
-                </div>
-            </div>
-
-            <div class="carousel-slide" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                <div class="slide-content">
-                    <div class="slide-badge">Career Goals</div>
-                    <h1 class="slide-title">Future Vision</h1>
-                    <p class="slide-subtitle">From Administrator to Entrepreneur</p>
-                    <p class="slide-description">Progressing toward team leadership and building my own business</p>
-                    <a href="#goals" class="btn btn-primary">Learn More</a>
-                </div>
-            </div>
-
-            <!-- Carousel Controls -->
-            <button class="carousel-btn prev" onclick="changeSlide(-1)">&#10094;</button>
-            <button class="carousel-btn next" onclick="changeSlide(1)">&#10095;</button>
-
-            <!-- Carousel Indicators -->
-            <div class="carousel-indicators">
-                <span class="indicator active" onclick="currentSlide(0)"></span>
-                <span class="indicator" onclick="currentSlide(1)"></span>
-                <span class="indicator" onclick="currentSlide(2)"></span>
-            </div>
-        </div>
+      </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="about">
-        <div class="container">
-            <h2 class="section-title">About Me</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <p>I am a <strong>Business Administration Apprentice</strong> developing strong organisational, communication, and administrative skills in a professional environment. I support day-to-day business operations and enjoy working efficiently to help teams run smoothly.</p>
-                    <p>Currently working in the <strong>care industry</strong>, I have gained valuable experience in supporting operations, managing communications, and maintaining records. I am motivated to learn, grow, and build a successful career in business administration.</p>
-                    <p>My passion for organisation, teamwork, and continuous improvement drives me to excel in every task I undertake. I am committed to delivering quality support and making a meaningful impact in any organisation I join.</p>
-                </div>
-                <div class="about-highlight">
-                    <div class="highlight-box">
-                        <h3>Current Role</h3>
-                        <p>Business Administration Apprentice</p>
-                    </div>
-                    <div class="highlight-box">
-                        <h3>Industry</h3>
-                        <p>Care Sector</p>
-                    </div>
-                </div>
-            </div>
+    <section id="skills">
+      <div class="container">
+        <div class="section-header">
+          <span>Skills</span>
+          <h2>A growing skill set built around organisation, communication, and reliability.</h2>
         </div>
+
+        <div class="skills-grid">
+          <div class="skill">
+            <h3>Administrative Skills</h3>
+            <p>Organisation, data entry, record management, time management, and supporting efficient office operations.</p>
+          </div>
+
+          <div class="skill">
+            <h3>Communication</h3>
+            <p>Professional communication, teamwork, listening skills, and building positive working relationships.</p>
+          </div>
+
+          <div class="skill">
+            <h3>Digital Tools</h3>
+            <p>Confidence using Microsoft Office tools such as Word, Excel, and Outlook to support daily tasks.</p>
+          </div>
+
+          <div class="skill">
+            <h3>Personal Strengths</h3>
+            <p>Resilience, ambition, reliability, a strong work ethic, and a willingness to keep learning and improving.</p>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- Skills Section -->
-    <section id="skills" class="skills">
-        <div class="container">
-            <h2 class="section-title">My Skills</h2>
-            <p class="section-subtitle">Core competencies developed through apprenticeship and professional experience</p>
-            <div class="skills-grid">
-                <div class="skill-card">
-                    <div class="skill-icon">📊</div>
-                    <h3>Organisation & Time Management</h3>
-                    <p>Efficiently managing tasks, priorities, and schedules to ensure smooth operations and timely delivery of work.</p>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">💬</div>
-                    <h3>Communication</h3>
-                    <p>Professional communication across email, phone, and face-to-face interactions with strong teamwork and collaboration skills.</p>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">💻</div>
-                    <h3>Microsoft Office Suite</h3>
-                    <p>Proficient in Word, Excel, and Outlook for document creation, data analysis, and professional communications.</p>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">📋</div>
-                    <h3>Data Entry & Record Keeping</h3>
-                    <p>Accurate data entry and meticulous record management to maintain organised and accessible information systems.</p>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">🤝</div>
-                    <h3>Customer Service</h3>
-                    <p>Providing excellent service with professionalism, empathy, and a commitment to meeting customer needs.</p>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">🎯</div>
-                    <h3>Professional Development</h3>
-                    <p>Continuously learning and improving skills to excel in administration and support team success.</p>
-                </div>
-            </div>
+    <section id="goals">
+      <div class="container">
+        <div class="section-card">
+          <div class="section-header">
+            <span>Career Goals</span>
+            <h2>I am building towards leadership and long-term business success.</h2>
+          </div>
+
+          <p>
+            As a Business Administration Apprentice in the care industry, I am building a strong foundation in
+            administration, communication, and supporting day-to-day operations. My goal is to progress into a
+            team leader or management role, where I can take on greater responsibility, support others, and
+            make a positive impact within an organisation.
+          </p>
+
+          <p>
+            In the long term, I aspire to run my own business and apply the knowledge, discipline, and experience
+            I gain throughout my career to create something meaningful, successful, and sustainable.
+          </p>
         </div>
+      </div>
     </section>
 
-    <!-- Career Goals Section -->
-    <section id="goals" class="goals">
-        <div class="container">
-            <h2 class="section-title">Career Goals & Vision</h2>
-            <div class="goals-timeline">
-                <div class="goal-item">
-                    <div class="goal-stage">Stage 1</div>
-                    <h3>Excel as Administrator</h3>
-                    <p>Master all aspects of business administration, build strong relationships with colleagues, and become an integral part of the team.</p>
-                </div>
-                <div class="goal-item">
-                    <div class="goal-stage">Stage 2</div>
-                    <h3>Progress to Team Leader</h3>
-                    <p>Develop leadership skills and progress into a team leader or management position where I can lead, support, and guide others to success.</p>
-                </div>
-                <div class="goal-item">
-                    <div class="goal-stage">Stage 3</div>
-                    <h3>Establish My Own Business</h3>
-                    <p>Apply my experience and knowledge to create something meaningful and successful. Build a business that reflects my values and contributes positively to society.</p>
-                </div>
-            </div>
+    <section id="contact">
+      <div class="container contact-grid">
+        <div class="contact-card">
+          <div class="section-header">
+            <span>Contact</span>
+            <h2>Let’s connect.</h2>
+          </div>
+          <p>
+            You can use this section to share your email address, LinkedIn profile, GitHub, or any other relevant professional links.
+          </p>
         </div>
+
+        <div class="contact-card">
+          <h3>Details</h3>
+          <ul class="contact-list">
+            <li>Email: your-email@example.com</li>
+            <li>LinkedIn: add-your-linkedin-link</li>
+            <li>Location: United Kingdom</li>
+          </ul>
+        </div>
+      </div>
     </section>
+  </main>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2 class="section-title">Let's Connect</h2>
-            <p class="section-subtitle">I'd love to hear from you. Connect with me on LinkedIn or reach out for opportunities and collaborations.</p>
-            <div class="contact-content">
-                <a href="https://www.linkedin.com/in/keelie-cadby-967321337/" class="btn btn-primary" target="_blank">
-                    Connect on LinkedIn
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2026 Keelie Cadby. All Rights Reserved. | Business Administration Apprentice in the Care Industry</p>
-        </div>
-    </footer>
-
-    <script src="script.js"></script>
+  <footer>
+    © 2026 Keelie Cadby. All rights reserved.
+  </footer>
 </body>
 </html>
