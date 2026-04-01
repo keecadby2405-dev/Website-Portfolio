@@ -1,84 +1,53 @@
-.navbar {
-  background: #333;
-  color: #fff;
-  padding: 1rem;
+.container {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-}
-
-.navbar a {
-  color: #fff;
-  padding: 0.5rem 1rem;
-  text-decoration: none;
-}
-
-.hero {
-  height: 100vh;
-  background: url('hero.jpg') no-repeat center center/cover;
-  display: flex;
   justify-content: center;
-  align-items: center;
-  animation: fadeIn 2s;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.carousel {
   width: 100%;
-  overflow: hidden;
+  height: 100vh;
+  background: linear-gradient(90deg, rgba(82, 197, 231, 1) 0%, rgba(221, 238, 255, 1) 100%);
 }
 
-.carousel-inner {
-  display: flex;
-  transition: transform 0.5s ease;
+h1 {
+  font-size: 3em;
+  margin: 20px 0;
+  color: #344952;
+  transition: color 0.3s ease-in-out;
 }
 
-.carousel-item {
-  min-width: 100%;
+h1:hover {
+  color: #1d2c3f;
 }
 
-.skill-card {
-  background: #f4f4f4;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 20px;
+p {
+  font-size: 1.2em;
+  color: #545d6f;
   margin: 10px;
-  transition: transform 0.3s;
+  text-align: center;
 }
 
-.skill-card:hover {
-  transform: scale(1.05);
-}
-
-.goal-timeline {
-  position: relative;
-  padding: 1rem;
-  margin: auto;
-}
-
-.goal-timeline div {
-  background: #007bff;
-  color: white;
+.button {
+  padding: 10px 20px;
+  background-color: #58a4b0;
+  border: none;
   border-radius: 5px;
-  padding: 10px;
-  margin: 10px 0;
-  animation: slideIn 0.5s;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-@keyframes slideIn {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(0); }
+.button:hover {
+  background-color: #3a7e8c;
 }
 
-@media (max-width: 600px) {
-  .navbar {
-    flex-direction: column;
+@media only screen and (max-width: 768px) {
+  .container {
+    padding: 20px;
   }
-  .skill-card {
-    margin: 5px;
+  h1 {
+    font-size: 2.5em;
+  }
+  p {
+    font-size: 1em;
   }
 }
