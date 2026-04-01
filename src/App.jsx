@@ -254,6 +254,12 @@ export default function Portfolio() {
                 variants={fadeUp}
                 style={styles.heroButtons}
               >
+                  <div
+    className="cf-turnstile"
+    data-sitekey="0x4AAAAAACy9qo372FzJWivY"
+    data-theme="dark"
+    style={{ marginBottom: "20px" }}
+  ></div>
                 <a href="mailto:Keecadby2405@gmail.com" style={styles.primaryButton}>
                   <MailIcon size={16} style={{ marginRight: 8 }} />
                   Email Me
