@@ -1,3 +1,4 @@
+const [verified, setVerified] = React.useState(false);
 import React from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
@@ -166,16 +167,44 @@ export default function Portfolio() {
   const orbOneY = useTransform(scrollYProgress, [0, 1], [0, -180]);
   const orbTwoY = useTransform(scrollYProgress, [0, 1], [0, 220]);
   const progressScaleX = useTransform(scrollYProgress, [0, 1], [0, 1]);
-
+const [verified, setVerified] = React.useState(false);
+React.useEffect(() => {
+  window.onTurnstileSuccess = () => setVerified(true);
+  return () => {
+    delete window.onTurnstileSuccess;
+  };
+}, []);
   return (
-    <div style={styles.page}>
-      <motion.div
-        style={{
-          ...styles.progress,
-          scaleX: progressScaleX,
-          transformOrigin: "0% 50%",
-        }}
-      />
+  <>
+    {!verified && (
+      <div style={styles.captchaOverlay}>
+        <div style={styles.captchaBox}>
+          <p style={styles.eyebrow}>Verification</p>
+          <h2 style={styles.sectionTitle}>Please verify to enter my portfolio</h2>
+          <p style={styles.sectionText}>
+            Complete the security check to continue to my website.
+          </p>
+
+          <div
+            className="cf-turnstile"
+            data-sitekey="0x4AAAAAACy9qo372FzJWivY"
+            data-theme="dark"
+            data-callback="onTurnstileSuccess"
+            style={{ marginTop: "20px" }}
+          ></div>
+        </div>
+      </div>
+    )}
+
+    {verified && (
+      <div style={styles.page}>      
+       <motion.div
+  style={{
+    ...styles.progress,
+    scaleX: progressScaleX,
+    transformOrigin: "0% 50%",
+  }}
+/>
 
       <div style={styles.backgroundBase} />
       <motion.div style={{ ...styles.orbLeft, y: orbOneY }} />
@@ -254,12 +283,7 @@ export default function Portfolio() {
                 variants={fadeUp}
                 style={styles.heroButtons}
               >
-                  <div
-    className="cf-turnstile"
-    data-sitekey="0x4AAAAAACy9qo372FzJWivY"
-    data-theme="dark"
-    style={{ marginBottom: "20px" }}
-  ></div>
+                
                 <a href="mailto:Keecadby2405@gmail.com" style={styles.primaryButton}>
                   <MailIcon size={16} style={{ marginRight: 8 }} />
                   Email Me
