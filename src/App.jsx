@@ -227,9 +227,12 @@ export default function Portfolio() {
               >
                 My story • My growth • My future
               </motion.p>
-
-              <motion.h1
-  ...
+<motion.h1
+  initial="hidden"
+  animate="visible"
+  custom={1}
+  variants={fadeUp}
+  className="mt-7 max-w-5xl text-5xl font-semibold leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-7xl xl:text-[5.5rem]"
 >
   I’m a Business Admin Apprentice building my future with confidence, resilience, and ambition.
 </motion.h1>
