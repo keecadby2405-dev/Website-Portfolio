@@ -682,8 +682,8 @@ captchaBox: {
   display: "flex",
   alignItems: "center",
   overflow: "hidden",
-  padding: "72px 20px 48px",
-  },
+padding: "96px 20px 48px",
+ },
   heroGrid: {
   maxWidth: 1280,
   margin: "0 auto",
