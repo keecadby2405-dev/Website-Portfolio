@@ -229,14 +229,10 @@ export default function Portfolio() {
               </motion.p>
 
               <motion.h1
-                initial="hidden"
-                animate="visible"
-                custom={1}
-                variants={fadeUp}
-                style={styles.heroTitle}
-              >
-                I am building my future with confidence, resilience, and ambition.
-              </motion.h1>
+  ...
+>
+  I’m a Business Admin Apprentice building my future with confidence, resilience, and ambition.
+</motion.h1>
 
               <motion.p
                 initial="hidden"
@@ -245,9 +241,7 @@ export default function Portfolio() {
                 variants={fadeUp}
                 style={styles.heroText}
               >
-                I know where I come from, I know how much I’ve grown, and I’m focused
-                on where I’m going. Everything I do is about improving, learning, and
-                creating a strong future for myself.
+                I know where I come from, I know how much I’ve grown, and I’m focused on where I’m going. As a Business Admin Apprentice, I am gaining real experience while continuing to improve, learn, and build a strong future for myself.
               </motion.p>
 
               <motion.div
@@ -394,7 +388,7 @@ export default function Portfolio() {
           <SectionIntro
             eyebrow="Skills"
             title="The strengths I am building into my future."
-            text="These are the qualities I continue to strengthen so I can grow with confidence and present myself professionally in every environment."
+text="These are the key skills I am developing as a Business Admin Apprentice to grow professionally and succeed in a structured working environment."
           />
 
           <div style={styles.skillsGrid}>
