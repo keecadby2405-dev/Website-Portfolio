@@ -186,12 +186,14 @@ useEffect(() => {
           </p>
 
           <div
-            className="cf-turnstile"
-            data-sitekey="0x4AAAAAACy9qo372FzJWivY"
-            data-theme="dark"
-            data-callback="onTurnstileSuccess"
-            style={{ marginTop: "20px" }}
-          ></div>
+  className="cf-turnstile"
+  data-sitekey="0x4AAAAAACy9qo372FzJWivY"
+  data-theme="dark"
+  data-callback="onTurnstileSuccess"
+  data-appearance="always"
+  data-size="normal"
+  style={{ marginTop: "20px" }}
+></div>
         </div>
       </div>
     )}
