@@ -1,5 +1,5 @@
 const [verified, setVerified] = React.useState(false);
-import React from "react";
+import { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 const experienceItems = [
@@ -167,8 +167,9 @@ export default function Portfolio() {
   const orbOneY = useTransform(scrollYProgress, [0, 1], [0, -180]);
   const orbTwoY = useTransform(scrollYProgress, [0, 1], [0, 220]);
   const progressScaleX = useTransform(scrollYProgress, [0, 1], [0, 1]);
-const [verified, setVerified] = React.useState(false);
-React.useEffect(() => {
+const [verified, setVerified] = useState(false);
+  
+useEffect(() => {
   window.onTurnstileSuccess = () => setVerified(true);
   return () => {
     delete window.onTurnstileSuccess;
