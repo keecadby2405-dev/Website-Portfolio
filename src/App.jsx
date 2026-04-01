@@ -690,7 +690,7 @@ padding: "96px 20px 48px",
   width: "100%",
   display: "grid",
   gridTemplateColumns: "1fr",
-  gap: 32,
+  gap: 24,
   alignItems: "end",
 },
   heroTag: {
