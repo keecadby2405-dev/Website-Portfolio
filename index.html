@@ -1,11 +1,18 @@
-// NOTE: This version removes ES module imports so it works in simple environments (like basic site builders)
-// Make sure React + Framer Motion are already available globally
-
-const { motion, useScroll, useTransform } = window.framerMotion || {};
+import React from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 function IconWrapper({ className = "h-5 w-5", children }) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
       {children}
     </svg>
   );
@@ -22,61 +29,421 @@ function MailIcon({ className }) {
 
 function LinkedInIcon({ className }) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
       <path d="M6.94 8.5a1.56 1.56 0 1 0 0-3.12 1.56 1.56 0 0 0 0 3.12ZM5.6 9.75h2.68V18H5.6V9.75Zm4.36 0h2.57v1.13h.04c.36-.68 1.23-1.39 2.53-1.39 2.7 0 3.2 1.78 3.2 4.1V18h-2.68v-3.91c0-.93-.02-2.13-1.3-2.13-1.31 0-1.51 1.02-1.51 2.06V18H9.96V9.75Z" />
     </svg>
   );
 }
 
-function Portfolio() {
+function ArrowDownIcon({ className }) {
   return (
-    <div style={{ minHeight: "100vh", background: "#0d1117", color: "white", padding: "40px" }}>
-
-      <h1 style={{ fontSize: "48px", fontWeight: "bold" }}>
-        I am building my future with confidence, resilience, and ambition.
-      </h1>
-
-      <p style={{ marginTop: "20px", maxWidth: "600px", color: "#ccc" }}>
-        I know where I come from, I know how much I’ve grown, and I’m focused on where I’m going.
-      </p>
-
-      <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
-        <a href="mailto:Keecadby2405@gmail.com">Email Me</a>
-        <a href="https://www.linkedin.com/in/keelie-cadby-967321337/" target="_blank">LinkedIn</a>
-      </div>
-
-      <section style={{ marginTop: "60px" }}>
-        <h2>About Me</h2>
-        <p style={{ marginTop: "10px", color: "#bbb" }}>
-          I haven’t had the easiest journey, but it has made me stronger. I take pride in how far I’ve come and I’m committed to building a better future.
-        </p>
-      </section>
-
-      <section style={{ marginTop: "60px" }}>
-        <h2>Experience</h2>
-        <ul style={{ marginTop: "10px", color: "#bbb" }}>
-          <li>Developing myself professionally</li>
-          <li>Overcoming challenges</li>
-          <li>Building confidence and commitment</li>
-        </ul>
-      </section>
-
-      <section style={{ marginTop: "60px" }}>
-        <h2>Skills</h2>
-        <p style={{ marginTop: "10px", color: "#bbb" }}>
-          Communication, Confidence, Adaptability, Teamwork, Creativity
-        </p>
-      </section>
-
-      <section style={{ marginTop: "60px" }}>
-        <h2>Goals</h2>
-        <p style={{ marginTop: "10px", color: "#bbb" }}>
-          I want to grow, improve, and build a successful future I can be proud of.
-        </p>
-      </section>
-
-    </div>
+    <IconWrapper className={className}>
+      <path d="M12 5v14" />
+      <path d="m6 13 6 6 6-6" />
+    </IconWrapper>
   );
 }
 
-export default Portfolio;
+function StarIcon({ className }) {
+  return (
+    <IconWrapper className={className}>
+      <path d="M12 3.5l2.5 5.05 5.58.81-4.04 3.94.95 5.56L12 16.95 7.01 18.86l.95-5.56-4.04-3.94 5.58-.81L12 3.5Z" />
+    </IconWrapper>
+  );
+}
+
+const experienceItems = [
+  {
+    title: "Developing Myself Professionally",
+    subtitle: "Growing with purpose",
+    description:
+      "I am constantly building my communication, organisation and confidence so I can present myself professionally and take on new opportunities with clarity and focus.",
+  },
+  {
+    title: "Overcoming Challenges",
+    subtitle: "Turning setbacks into strength",
+    description:
+      "I have faced challenges that have shaped my mindset. Instead of holding me back, they have made me stronger, more disciplined and more determined to succeed.",
+  },
+  {
+    title: "My Mindset",
+    subtitle: "Pride and commitment",
+    description:
+      "I take pride in who I am becoming. I show up with confidence, put effort into everything I do, and stay committed to building a better future for myself.",
+  },
+];
+
+const skills = [
+  "Communication",
+  "Confidence",
+  "Adaptability",
+  "Teamwork",
+  "Creativity",
+  "Professionalism",
+  "Commitment",
+  "Resilience",
+];
+
+const storyPoints = [
+  "Where I come from has shaped my mindset.",
+  "Where I am now reflects growth and perseverance.",
+  "Where I am going is driven by ambition and self-belief.",
+];
+
+export const __testCases = {
+  sectionIds: ["about", "experience", "skills", "goals", "contact"],
+  experienceCount: experienceItems.length,
+  skillsCount: skills.length,
+  storyCount: storyPoints.length,
+  ctaLabels: ["Email Me", "LinkedIn"],
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.8,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  }),
+};
+
+const reveal = {
+  hidden: { opacity: 0, y: 32 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
+function SectionIntro({ eyebrow, title, text }) {
+  return (
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+      variants={reveal}
+      className="max-w-3xl"
+    >
+      <p className="text-xs uppercase tracking-[0.35em] text-pink-200/70">{eyebrow}</p>
+      <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">{title}</h2>
+      <p className="mt-5 text-base leading-8 text-stone-300/80">{text}</p>
+    </motion.div>
+  );
+}
+
+export default function Portfolio() {
+  const { scrollYProgress } = useScroll();
+  const heroY = useTransform(scrollYProgress, [0, 0.25], [0, -120]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0.35]);
+  const orbOneY = useTransform(scrollYProgress, [0, 1], [0, -180]);
+  const orbTwoY = useTransform(scrollYProgress, [0, 1], [0, 220]);
+  const progressScaleX = useTransform(scrollYProgress, [0, 1], [0, 1]);
+
+  return (
+    <div className="min-h-screen overflow-x-hidden bg-[#0d1117] text-white selection:bg-pink-400/30">
+      <motion.div
+        style={{ scaleX: progressScaleX, transformOrigin: "0% 50%" }}
+        className="fixed left-0 top-0 z-[70] h-[3px] w-full bg-pink-400"
+      />
+
+      <div className="fixed inset-0 -z-20 bg-[linear-gradient(to_bottom,#090b10,#0d1117,#11151d)]" />
+      <motion.div
+        style={{ y: orbOneY }}
+        className="fixed -left-24 top-0 -z-10 h-[28rem] w-[28rem] rounded-full bg-pink-500/15 blur-3xl"
+      />
+      <motion.div
+        style={{ y: orbTwoY }}
+        className="fixed right-[-6rem] top-[18rem] -z-10 h-[30rem] w-[30rem] rounded-full bg-fuchsia-400/10 blur-3xl"
+      />
+      <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top,rgba(236,72,153,0.14),transparent_28%),radial-gradient(circle_at_80%_20%,rgba(217,70,239,0.10),transparent_18%)]" />
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)] bg-[size:70px_70px] [mask-image:radial-gradient(circle_at_center,black,transparent_88%)]" />
+
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0d1117]/70 backdrop-blur-2xl">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: -18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="flex items-center gap-3"
+          >
+            <div className="flex h-11 w-11 items-center justify-center rounded-full border border-pink-400/30 bg-pink-400/10 text-pink-300 shadow-lg shadow-pink-500/10">
+              <StarIcon className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.35em] text-stone-400">Keelie Cadby</p>
+              <p className="text-sm font-medium text-white">My Portfolio</p>
+            </div>
+          </motion.div>
+
+          <nav className="hidden gap-8 text-sm text-stone-300 lg:flex">
+            <a className="transition hover:text-white" href="#about">About</a>
+            <a className="transition hover:text-white" href="#experience">Experience</a>
+            <a className="transition hover:text-white" href="#skills">Skills</a>
+            <a className="transition hover:text-white" href="#goals">Goals</a>
+            <a className="transition hover:text-white" href="#contact">Contact</a>
+          </nav>
+
+          <a
+            href="#contact"
+            className="hidden rounded-full bg-pink-400 px-5 py-2.5 text-sm font-medium text-black shadow-lg shadow-pink-500/20 transition hover:bg-pink-300 lg:inline-flex"
+          >
+            Contact Me
+          </a>
+        </div>
+      </header>
+
+      <main>
+        <section className="relative flex min-h-screen items-center overflow-hidden px-6 py-24 lg:px-8">
+          <motion.div style={{ y: heroY, opacity: heroOpacity }} className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+            <div>
+              <motion.p
+                initial="hidden"
+                animate="visible"
+                custom={0}
+                variants={fadeUp}
+                className="inline-flex items-center rounded-full border border-pink-400/20 bg-pink-400/10 px-4 py-2 text-xs uppercase tracking-[0.35em] text-pink-200/80 backdrop-blur-md"
+              >
+                My story • My growth • My future
+              </motion.p>
+
+              <motion.h1
+                initial="hidden"
+                animate="visible"
+                custom={1}
+                variants={fadeUp}
+                className="mt-7 max-w-5xl text-5xl font-semibold leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-7xl xl:text-[5.5rem]"
+              >
+                I am building my future with confidence, resilience, and ambition.
+              </motion.h1>
+
+              <motion.p
+                initial="hidden"
+                animate="visible"
+                custom={2}
+                variants={fadeUp}
+                className="mt-7 max-w-2xl text-lg leading-8 text-stone-300/85"
+              >
+                I know where I come from, I know how much I’ve grown, and I’m focused on where I’m going. Everything I do is about improving, learning, and creating a strong future for myself.
+              </motion.p>
+
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                custom={3}
+                variants={fadeUp}
+                className="mt-10 flex flex-col gap-4 sm:flex-row"
+              >
+                <a
+                  href="mailto:Keecadby2405@gmail.com"
+                  className="inline-flex items-center justify-center rounded-full bg-pink-400 px-6 py-4 text-sm font-medium text-black shadow-xl shadow-pink-500/20 transition hover:bg-pink-300"
+                >
+                  <MailIcon className="mr-2 h-4 w-4" /> Email Me
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/keelie-cadby-967321337/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 py-4 text-sm font-medium text-white backdrop-blur-md transition hover:bg-white/10"
+                >
+                  <LinkedInIcon className="mr-2 h-4 w-4" /> LinkedIn
+                </a>
+              </motion.div>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.94, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+              className="grid gap-4 sm:grid-cols-2"
+            >
+              {storyPoints.map((point, index) => (
+                <motion.div
+                  key={point}
+                  whileHover={{ y: -8, scale: 1.01 }}
+                  transition={{ duration: 0.3 }}
+                  className={`${index === 0 ? "sm:col-span-2" : ""} rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur-xl shadow-2xl shadow-black/20`}
+                >
+                  <p className="text-xs uppercase tracking-[0.35em] text-pink-200/70">Personal focus</p>
+                  <p className="mt-4 text-2xl font-semibold leading-tight text-white">{point}</p>
+                </motion.div>
+              ))}
+              <motion.div
+                whileHover={{ y: -8 }}
+                className="rounded-[28px] border border-pink-400/20 bg-pink-400/10 p-6 backdrop-blur-xl shadow-xl shadow-pink-500/10"
+              >
+                <p className="text-xs uppercase tracking-[0.35em] text-pink-100/80">Mindset</p>
+                <p className="mt-4 text-base leading-8 text-stone-100/90">
+                  I take pride in how far I’ve come, and I stay committed to becoming more capable, more confident, and more ready for every opportunity ahead.
+                </p>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+
+          <motion.a
+            href="#about"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.1, duration: 0.7 }}
+            className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.28em] text-stone-300 backdrop-blur-md md:inline-flex"
+          >
+            Scroll
+            <motion.span animate={{ y: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 1.8 }}>
+              <ArrowDownIcon className="h-4 w-4" />
+            </motion.span>
+          </motion.a>
+        </section>
+
+        <section id="about" className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
+          <SectionIntro
+            eyebrow="About Me"
+            title="My journey has shaped the person I am becoming."
+            text="I haven’t had the easiest journey, but that is exactly what has built my strength. I have learned how to keep going, stay focused, and believe in myself even through difficult moments. Everything I have been through has developed my confidence and made me more determined to succeed. I take pride in my growth, and I am committed to continuing that progress."
+          />
+
+          <div className="mt-12 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={reveal} whileHover={{ y: -6 }}>
+              <div className="rounded-[30px] border border-white/10 bg-white/5 p-8 text-white backdrop-blur-xl shadow-2xl shadow-black/20 sm:p-10">
+                <p className="text-xs uppercase tracking-[0.35em] text-pink-200/70">Where I come from</p>
+                <p className="mt-5 text-lg leading-8 text-stone-200/85">
+                  My background has taught me resilience, patience, and self-respect. It has shown me that growth takes effort and that becoming the person I want to be is something I build every day.
+                </p>
+              </div>
+            </motion.div>
+
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={reveal} transition={{ delay: 0.1 }} whileHover={{ y: -6 }}>
+              <div className="rounded-[30px] border border-pink-400/20 bg-pink-400/10 p-8 text-white backdrop-blur-xl shadow-2xl shadow-pink-500/10 sm:p-10">
+                <p className="text-xs uppercase tracking-[0.35em] text-pink-100/80">Where I am now</p>
+                <p className="mt-5 text-lg leading-8 text-stone-100/90">
+                  I am in a stage of real growth. I am learning, improving, and pushing myself to become more professional, more capable, and more prepared for the future I want.
+                </p>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        <section id="experience" className="relative border-y border-white/10 bg-white/[0.03] px-6 py-24 lg:px-8">
+          <div className="mx-auto max-w-7xl">
+            <SectionIntro
+              eyebrow="Experience"
+              title="My experience reflects growth, discipline, and mindset."
+              text="This section highlights how I am developing professionally, how I respond to challenges, and the attitude I bring into everything I do."
+            />
+
+            <div className="mt-12 grid gap-6 lg:grid-cols-3">
+              {experienceItems.map((item, index) => (
+                <motion.div
+                  key={item.title}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.2 }}
+                  variants={fadeUp}
+                  custom={index + 1}
+                  whileHover={{ y: -10, rotateX: 2, rotateY: -2 }}
+                  transition={{ duration: 0.3 }}
+                  style={{ transformStyle: "preserve-3d" }}
+                >
+                  <div className="h-full rounded-[30px] border border-white/10 bg-[#131a23]/90 p-7 text-white backdrop-blur-xl shadow-2xl shadow-black/20 transition duration-300 hover:border-pink-400/25 hover:bg-[#161f29] sm:p-8">
+                    <p className="text-xs uppercase tracking-[0.3em] text-pink-300/80">{item.subtitle}</p>
+                    <h3 className="mt-4 text-2xl font-semibold">{item.title}</h3>
+                    <p className="mt-4 leading-8 text-stone-300/80">{item.description}</p>
+                    <div className="mt-8 h-px w-full bg-gradient-to-r from-pink-400/50 via-pink-200/20 to-transparent" />
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="skills" className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
+          <SectionIntro
+            eyebrow="Skills"
+            title="The strengths I am building into my future."
+            text="These are the qualities I continue to strengthen so I can grow with confidence and present myself professionally in every environment."
+          />
+
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {skills.map((skill, index) => (
+              <motion.div
+                key={skill}
+                initial={{ opacity: 0, y: 18, scale: 0.96 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.05, duration: 0.45 }}
+                whileHover={{ y: -6, scale: 1.02 }}
+                className="rounded-[24px] border border-pink-400/12 bg-pink-400/10 px-5 py-5 text-center text-base font-medium text-pink-100 backdrop-blur-xl shadow-lg shadow-pink-500/5"
+              >
+                {skill}
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        <section id="goals" className="relative overflow-hidden border-y border-white/10 px-6 py-24 lg:px-8">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(236,72,153,0.12),transparent_32%)]" />
+          <div className="relative mx-auto max-w-6xl">
+            <SectionIntro
+              eyebrow="My Goals"
+              title="I am focused on creating a future I can be proud of."
+              text="My goals are centred around growth, independence, professionalism, and becoming someone who is respected for her mindset, consistency, and ambition."
+            />
+
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.25 }} variants={reveal} whileHover={{ y: -6 }} className="mt-12">
+              <div className="rounded-[34px] border border-white/10 bg-white/5 p-8 backdrop-blur-2xl shadow-2xl shadow-black/20 sm:p-10 lg:p-12">
+                <p className="max-w-4xl text-lg leading-9 text-stone-200/85">
+                  My goal is to build a successful and stable future for myself. I want to keep improving my skills, gain experience, and become someone who is confident, capable, and respected in a professional environment. I am focused on growth, consistency, and making something of myself that I can truly be proud of.
+                </p>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        <section id="contact" className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={reveal}
+            className="rounded-[36px] border border-white/10 bg-white/5 p-8 backdrop-blur-2xl shadow-2xl shadow-black/20 sm:p-10 lg:p-12"
+          >
+            <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+              <div>
+                <p className="text-xs uppercase tracking-[0.35em] text-pink-200/70">Contact</p>
+                <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                  I’m ready for new opportunities, growth, and meaningful connections.
+                </h2>
+                <p className="mt-5 max-w-2xl text-base leading-8 text-stone-300/80">
+                  I want my next steps to reflect the work I’ve put into myself. I’m focused on moving forward with confidence, pride, and commitment.
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-4 sm:flex-row lg:flex-col">
+                <a
+                  href="mailto:Keecadby2405@gmail.com"
+                  className="inline-flex items-center justify-center rounded-full bg-pink-400 px-6 py-4 text-sm font-medium text-black shadow-xl shadow-pink-500/20 transition hover:bg-pink-300"
+                >
+                  <MailIcon className="mr-2 h-4 w-4" /> Email Me
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/keelie-cadby-967321337/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 py-4 text-sm font-medium text-white backdrop-blur-md transition hover:bg-white/10"
+                >
+                  <LinkedInIcon className="mr-2 h-4 w-4" /> LinkedIn
+                </a>
+              </div>
+            </div>
+          </motion.div>
+        </section>
+      </main>
+    </div>
+  );
+}
