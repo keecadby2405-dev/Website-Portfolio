@@ -509,8 +509,10 @@ text="These are the key skills I am developing as a Business Admin Apprentice to
           </motion.div>
         </section>
       </main>
-    </div>
-  );
+</div>
+)}
+</>
+);
 }
 
 const styles = {
