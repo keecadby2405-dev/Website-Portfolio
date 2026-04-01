@@ -169,31 +169,33 @@ export default function Portfolio() {
 
 const [verified, setVerified] = useState(false);
 useEffect(() => {
-  window.onTurnstileSuccess = () => setVerified(true);
-  return () => {
-    delete window.onTurnstileSuccess;
-  };
+  const timer = setTimeout(() => {
+    if (window.turnstile) {
+      window.turnstile.render("#turnstile-container", {
+        sitekey: "0x4AAAAAACy9qo372FzJWivY",
+        theme: "dark",
+        callback: () => setVerified(true),
+      });
+    }
+  }, 100);
+
+  return () => clearTimeout(timer);
 }, []);
   return (
   <>
-    {!verified && (
-      <div style={styles.captchaOverlay}>
-        <div style={styles.captchaBox}>
-          <p style={styles.eyebrow}>Verification</p>
-          <h2 style={styles.sectionTitle}>Please verify to enter my portfolio</h2>
-          <p style={styles.sectionText}>
-            Complete the security check to continue to my website.
-          </p>
+{!verified && (
+     <div style={styles.captchaOverlay}>
+  <div style={styles.captchaBox}>
+    <p style={styles.eyebrow}>Verification</p>
+    <h2 style={styles.sectionTitle}>Please verify to enter my portfolio</h2>
+    <p style={styles.sectionText}>
+      Complete the security check to continue to my website.
+    </p>
 
-          <div
-  className="cf-turnstile"
-  data-sitekey="0x4AAAAAACy9qo372FzJWivY"
-  data-theme="dark"
-  data-callback="onTurnstileSuccess"
-  data-appearance="always"
-  data-size="normal"
-  style={{ marginTop: "20px" }}
-></div>
+    <div
+      id="turnstile-container"
+      style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}
+    ></div>
         </div>
       </div>
     )}
