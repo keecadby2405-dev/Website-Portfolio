@@ -152,7 +152,7 @@ function StoryCard({ text, wide }) {
       }}
     >
       <p style={styles.smallLabel}>Personal focus</p>
-      <p style={{ fontSize: 28, lineHeight: 1.2, fontWeight: 600, marginTop: 16 }}>
+      <p style={{ fontSize: 28, lineHeight: 1.2, fontWeight: 600, marginTop: 32 }}>
         {text}
       </p>
     </motion.div>
@@ -709,7 +709,7 @@ padding: "96px 20px 48px",
 heroTitle: {
   margin: "24px 0 0",
   maxWidth: 820,
-  fontSize: "clamp(2.6rem, 9vw, 5.5rem)",
+fontSize: "clamp(2.2rem, 8vw, 5.5rem)",
   fontWeight: 600,
   lineHeight: 1.02,
   letterSpacing: "-0.04em",
