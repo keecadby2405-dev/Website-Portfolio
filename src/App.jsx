@@ -211,8 +211,17 @@ useEffect(() => {
 />
 
       <div style={styles.backgroundBase} />
-      <motion.div style={{ ...styles.orbLeft, y: orbOneY }} />
-      <motion.div style={{ ...styles.orbRight, y: orbTwoY }} />
+<motion.div
+  style={{ ...styles.orbLeft, y: orbOneY }}
+  animate={{ y: [0, -20, 0] }}
+  transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+/>
+
+<motion.div
+  style={{ ...styles.orbRight, y: orbTwoY }}
+  animate={{ y: [0, 20, 0] }}
+  transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+/>
       <div style={styles.backgroundGlow} />
       <div style={styles.backgroundGrid} />
 
