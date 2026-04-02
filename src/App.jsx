@@ -163,404 +163,410 @@ export default function Portfolio() {
   const { scrollYProgress } = useScroll();
   const heroY = useTransform(scrollYProgress, [0, 0.25], [0, -120]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0.35]);
-  const orbOneY = useTransform(scrollYProgress, [0, 1], [0, -180]);
-  const orbTwoY = useTransform(scrollYProgress, [0, 1], [0, 220]);
   const progressScaleX = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
-const [verified, setVerified] = useState(false);
-useEffect(() => {
-  const timer = setTimeout(() => {
-    if (window.turnstile) {
-      window.turnstile.render("#turnstile-container", {
-        sitekey: "0x4AAAAAACy9qo372FzJWivY",
-        theme: "dark",
-        callback: () => setVerified(true),
-      });
-    }
-  }, 100);
+  const [verified, setVerified] = useState(false);
 
-  return () => clearTimeout(timer);
-}, []);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (window.turnstile && document.getElementById("turnstile-container")) {
+        window.turnstile.render("#turnstile-container", {
+          sitekey: "YOUR_SITE_KEY_HERE",
+          theme: "dark",
+          callback: () => setVerified(true),
+        });
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-  <>
-{!verified && (
-     <div style={styles.captchaOverlay}>
-  <div style={styles.captchaBox}>
-    <p style={styles.eyebrow}>Verification</p>
-    <h2 style={styles.sectionTitle}>Please verify to enter my portfolio</h2>
-    <p style={styles.sectionText}>
-      Complete the security check to continue to my website.
-    </p>
+    <>
+      {!verified && (
+        <div style={styles.captchaOverlay}>
+          <div style={styles.captchaBox}>
+            <p style={styles.eyebrow}>Verification</p>
+            <h2 style={styles.sectionTitle}>Please verify to enter my portfolio</h2>
+            <p style={styles.sectionText}>
+              Complete the security check to continue to my website.
+            </p>
 
-    <div
-      id="turnstile-container"
-      style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}
-    ></div>
+            <div
+              id="turnstile-container"
+              style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}
+            ></div>
+          </div>
         </div>
-      </div>
-    )}
+      )}
 
-    {verified && (
-      <div style={styles.page}>      
-       <motion.div
-  style={{
-    ...styles.progress,
-    scaleX: progressScaleX,
-    transformOrigin: "0% 50%",
-  }}
-/>
-
-      <div style={styles.backgroundBase} />
-<motion.div
-  style={{ ...styles.orbLeft, y: orbOneY }}
-  animate={{ y: [0, -20, 0] }}
-  transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-/>
-
-<motion.div
-  style={{ ...styles.orbRight, y: orbTwoY }}
-  animate={{ y: [0, 20, 0] }}
-  transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-/>
-      <div style={styles.backgroundGlow} />
-      <div style={styles.backgroundGrid} />
-
-      <header style={styles.header}>
-        <div style={styles.headerInner}>
+      {verified && (
+        <div style={styles.page}>
           <motion.div
-            initial={{ opacity: 0, y: -18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            style={styles.brand}
-          >
-            <div style={styles.logoCircle}>
-              <StarIcon size={18} />
-            </div>
-            <div>
-              <p style={styles.brandTop}>Keelie Cadby</p>
-              <p style={styles.brandBottom}>My Portfolio</p>
-            </div>
-          </motion.div>
-
-          <nav style={styles.nav}>
-            <a href="#about" style={styles.navLink}>About</a>
-            <a href="#experience" style={styles.navLink}>Experience</a>
-            <a href="#skills" style={styles.navLink}>Skills</a>
-            <a href="#goals" style={styles.navLink}>Goals</a>
-            <a href="#contact" style={styles.navLink}>Contact</a>
-          </nav>
-
-          <a href="#contact" style={styles.contactButtonTop}>Contact Me</a>
-        </div>
-      </header>
-
-      <main>
-<section id="about" style={styles.heroSection}>
-  <motion.div
-            style={{ ...styles.heroGrid, y: heroY, opacity: heroOpacity }}
-          >
-            <div>
-              <motion.p
-                initial="hidden"
-                animate="visible"
-                custom={0}
-                variants={fadeUp}
-                style={styles.heroTag}
-              >
-                My story • My growth • My future
-              </motion.p>
-<motion.h1
-  initial="hidden"
-  animate="visible"
-  custom={1}
-  variants={fadeUp}
-  className="mt-7 max-w-5xl text-5xl font-semibold leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-7xl xl:text-[5.5rem]"
->
-  I’m a Business Admin Apprentice building my future with confidence, resilience, and ambition.
-</motion.h1>
-
-              <motion.p
-                initial="hidden"
-                animate="visible"
-                custom={2}
-                variants={fadeUp}
-                style={styles.heroText}
-              >
-                I know where I come from, I know how much I’ve grown, and I’m focused on where I’m going. As a Business Admin Apprentice, I am gaining real experience while continuing to improve, learn, and build a strong future for myself.
-              </motion.p>
-
-              <motion.div
-                initial="hidden"
-                animate="visible"
-                custom={3}
-                variants={fadeUp}
-                style={styles.heroButtons}
-              >
-                
-                <a href="mailto:Keecadby2405@gmail.com" style={styles.primaryButton}>
-                  <MailIcon size={16} style={{ marginRight: 8 }} />
-                  Email Me
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/keelie-cadby-967321337/"
-                  target="_blank"
-                  rel="noreferrer"
-                  style={styles.secondaryButton}
-                >
-                  <LinkedInIcon size={16} style={{ marginRight: 8 }} />
-                  LinkedIn
-                </a>
-              </motion.div>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.94, y: 30 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-              style={styles.storyGrid}
-            >
-              <StoryCard text={storyPoints[0]} wide />
-              <StoryCard text={storyPoints[1]} />
-              <StoryCard text={storyPoints[2]} />
-              <motion.div whileHover={{ y: -8 }} style={styles.pinkCard}>
-                <p style={{ ...styles.smallLabel, color: "rgba(255,232,242,0.85)" }}>
-                  Mindset
-                </p>
-                <p style={{ fontSize: 17, lineHeight: 1.9, marginTop: 16 }}>
-                  I take pride in how far I’ve come, and I stay committed to becoming
-                  more capable, more confident, and more ready for every opportunity ahead.
-                </p>
-              </motion.div>
-            </motion.div>
-          </motion.div>
-
-          <motion.a
-            href="#about"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.1, duration: 0.7 }}
-            style={styles.scrollPill}
-          >
-            Scroll
-            <motion.span
-              animate={{ y: [0, 6, 0] }}
-              transition={{ repeat: Infinity, duration: 1.8 }}
-              style={{ display: "inline-flex", marginLeft: 8 }}
-            >
-              <ArrowDownIcon size={14} />
-            </motion.span>
-          </motion.a>
-        </section>
-
-        <section id="about" style={styles.sectionWrap}>
-          <SectionIntro
-            eyebrow="About Me"
-            title="My journey has shaped the person I am becoming."
-            text="I haven’t had the easiest journey, but that is exactly what has built my strength. I have learned how to keep going, stay focused, and believe in myself even through difficult moments. Everything I have been through has developed my confidence and made me more determined to succeed. I take pride in my growth, and I am committed to continuing that progress."
+            style={{
+              ...styles.progress,
+              scaleX: progressScaleX,
+              transformOrigin: "0% 50%",
+            }}
           />
 
-          <div style={styles.twoCol}>
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-              variants={reveal}
-              whileHover={{ y: -6 }}
-            >
-              <div style={styles.glassCardLarge}>
-                <p style={styles.eyebrow}>Where I come from</p>
-                <p style={styles.largeCopy}>
-                  My background has taught me resilience, patience, and self-respect.
-                  It has shown me that growth takes effort and that becoming the person
-                  I want to be is something I build every day.
-                </p>
-              </div>
-            </motion.div>
+          <div style={styles.backgroundBase} />
+          <motion.div
+            style={styles.orbLeft}
+            animate={{ y: [0, -20, 0] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            style={styles.orbRight}
+            animate={{ y: [0, 20, 0] }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <div style={styles.backgroundGlow} />
+          <div style={styles.backgroundGrid} />
 
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-              variants={reveal}
-              transition={{ delay: 0.1 }}
-              whileHover={{ y: -6 }}
-            >
-              <div style={styles.pinkCardLarge}>
-                <p style={{ ...styles.eyebrow, color: "rgba(255,232,242,0.85)" }}>
-                  Where I am now
-                </p>
-                <p style={{ ...styles.largeCopy, color: "rgba(255,255,255,0.92)" }}>
-                  I am in a stage of real growth. I am learning, improving, and pushing
-                  myself to become more professional, more capable, and more prepared
-                  for the future I want.
-                </p>
-              </div>
-            </motion.div>
-          </div>
-        </section>
+          <header style={styles.header}>
+            <div style={styles.headerInner}>
+              <motion.div
+                initial={{ opacity: 0, y: -18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7 }}
+                style={styles.brand}
+              >
+                <div style={styles.logoCircle}>
+                  <StarIcon size={18} />
+                </div>
+                <div>
+                  <p style={styles.brandTop}>Keelie Cadby</p>
+                  <p style={styles.brandBottom}>My Portfolio</p>
+                </div>
+              </motion.div>
 
-       <section id="experience">
-  <div style={styles.cardsGrid}>
-            <SectionIntro
-              eyebrow="Experience"
-              title="My experience reflects growth, discipline, and mindset."
-              text="This section highlights how I am developing professionally, how I respond to challenges, and the attitude I bring into everything I do."
-            />
+              <nav style={styles.nav}>
+                <a href="#home" style={styles.navLink}>Home</a>
+                <a href="#about" style={styles.navLink}>About</a>
+                <a href="#experience" style={styles.navLink}>Experience</a>
+                <a href="#skills" style={styles.navLink}>Skills</a>
+                <a href="#goals" style={styles.navLink}>Goals</a>
+                <a href="#contact" style={styles.navLink}>Contact</a>
+              </nav>
 
-            <div style={styles.cardGrid3}>
-              {experienceItems.map((item, index) => (
+              <a href="#contact" style={styles.contactButtonTop}>Contact Me</a>
+            </div>
+          </header>
+
+          <main>
+            <section id="home" style={styles.heroSection}>
+              <motion.div
+                style={{ ...styles.heroGrid, y: heroY, opacity: heroOpacity }}
+              >
+                <div>
+                  <motion.p
+                    initial="hidden"
+                    animate="visible"
+                    custom={0}
+                    variants={fadeUp}
+                    style={styles.heroTag}
+                  >
+                    My story • My growth • My future
+                  </motion.p>
+
+                  <motion.h1
+                    initial="hidden"
+                    animate="visible"
+                    custom={1}
+                    variants={fadeUp}
+                    style={styles.heroTitle}
+                  >
+                    I’m a Business Admin Apprentice building my future with confidence, resilience, and ambition.
+                  </motion.h1>
+
+                  <motion.p
+                    initial="hidden"
+                    animate="visible"
+                    custom={2}
+                    variants={fadeUp}
+                    style={styles.heroText}
+                  >
+                    I know where I come from, I know how much I’ve grown, and I’m focused on where I’m going. As a Business Admin Apprentice, I am gaining real experience while continuing to improve, learn, and build a strong future for myself.
+                  </motion.p>
+
+                  <motion.div
+                    initial="hidden"
+                    animate="visible"
+                    custom={3}
+                    variants={fadeUp}
+                    style={styles.heroButtons}
+                  >
+                    <a href="mailto:Keecadby2405@gmail.com" style={styles.primaryButton}>
+                      <MailIcon size={16} style={{ marginRight: 8 }} />
+                      Email Me
+                    </a>
+                    <a
+                      href="https://www.linkedin.com/in/keelie-cadby-967321337/"
+                      target="_blank"
+                      rel="noreferrer"
+                      style={styles.secondaryButton}
+                    >
+                      <LinkedInIcon size={16} style={{ marginRight: 8 }} />
+                      LinkedIn
+                    </a>
+                  </motion.div>
+                </div>
+
                 <motion.div
-                  key={item.title}
+                  initial={{ opacity: 0, scale: 0.94, y: 30 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+                  style={styles.storyGrid}
+                >
+                  <StoryCard text={storyPoints[0]} wide />
+                  <StoryCard text={storyPoints[1]} />
+                  <StoryCard text={storyPoints[2]} />
+                  <motion.div whileHover={{ y: -8 }} style={styles.pinkCard}>
+                    <p style={{ ...styles.smallLabel, color: "rgba(255,232,242,0.85)" }}>
+                      Mindset
+                    </p>
+                    <p style={{ fontSize: 17, lineHeight: 1.9, marginTop: 16 }}>
+                      I take pride in how far I’ve come, and I stay committed to becoming
+                      more capable, more confident, and more ready for every opportunity ahead.
+                    </p>
+                  </motion.div>
+                </motion.div>
+              </motion.div>
+
+              <motion.a
+                href="#about"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.1, duration: 0.7 }}
+                style={styles.scrollPill}
+              >
+                Scroll
+                <motion.span
+                  animate={{ y: [0, 6, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.8 }}
+                  style={{ display: "inline-flex", marginLeft: 8 }}
+                >
+                  <ArrowDownIcon size={14} />
+                </motion.span>
+              </motion.a>
+            </section>
+
+            <section id="about" style={styles.sectionAlt}>
+              <div style={styles.container}>
+                <SectionIntro
+                  eyebrow="About Me"
+                  title="My journey has shaped the person I am becoming."
+                  text="I haven’t had the easiest journey, but that is exactly what has built my strength. I have learned how to keep going, stay focused, and believe in myself even through difficult moments. Everything I have been through has developed my confidence and made me more determined to succeed. I take pride in my growth, and I am committed to continuing that progress."
+                />
+
+                <div style={styles.twoCol}>
+                  <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.2 }}
+                    variants={reveal}
+                    whileHover={{ y: -6 }}
+                  >
+                    <div style={styles.glassCardLarge}>
+                      <p style={styles.eyebrow}>Where I come from</p>
+                      <p style={styles.largeCopy}>
+                        My background has taught me resilience, patience, and self-respect.
+                        It has shown me that growth takes effort and that becoming the person
+                        I want to be is something I build every day.
+                      </p>
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.2 }}
+                    variants={reveal}
+                    transition={{ delay: 0.1 }}
+                    whileHover={{ y: -6 }}
+                  >
+                    <div style={styles.pinkCardLarge}>
+                      <p style={{ ...styles.eyebrow, color: "rgba(255,232,242,0.85)" }}>
+                        Where I am now
+                      </p>
+                      <p style={{ ...styles.largeCopy, color: "rgba(255,255,255,0.92)" }}>
+                        I am in a stage of real growth. I am learning, improving, and pushing
+                        myself to become more professional, more capable, and more prepared
+                        for the future I want.
+                      </p>
+                    </div>
+                  </motion.div>
+                </div>
+              </div>
+            </section>
+
+            <section id="experience" style={styles.sectionAlt}>
+              <div style={styles.container}>
+                <SectionIntro
+                  eyebrow="Experience"
+                  title="My experience reflects growth, discipline, and mindset."
+                  text="This section highlights how I am developing professionally, how I respond to challenges, and the attitude I bring into everything I do."
+                />
+
+                <div style={styles.cardGrid3}>
+                  {experienceItems.map((item, index) => (
+                    <motion.div
+                      key={item.title}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true, amount: 0.2 }}
+                      variants={fadeUp}
+                      custom={index + 1}
+                      whileHover={{ y: -10 }}
+                    >
+                      <div style={styles.darkCard}>
+                        <p style={styles.smallLabel}>{item.subtitle}</p>
+                        <h3 style={styles.cardTitle}>{item.title}</h3>
+                        <p style={styles.cardText}>{item.description}</p>
+                        <div style={styles.cardLine} />
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            <section id="skills" style={styles.sectionAlt}>
+              <div style={styles.container}>
+                <SectionIntro
+                  eyebrow="Skills"
+                  title="The strengths I am building into my future."
+                  text="These are the key skills I am developing as a Business Admin Apprentice to grow professionally and succeed in a structured working environment."
+                />
+
+                <div style={styles.skillsGrid}>
+                  {skills.map((skill, index) => (
+                    <motion.div
+                      key={skill}
+                      initial={{ opacity: 0, y: 18, scale: 0.96 }}
+                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.05, duration: 0.45 }}
+                      whileHover={{ y: -6, scale: 1.02 }}
+                      style={styles.skillBox}
+                    >
+                      {skill}
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            <section id="goals" style={styles.sectionGoals}>
+              <div style={styles.container}>
+                <SectionIntro
+                  eyebrow="My Goals"
+                  title="I am focused on creating a future I can be proud of."
+                  text="My goals are centred around growth, independence, professionalism, and becoming someone who is respected for her mindset, consistency, and ambition."
+                />
+
+                <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.25 }}
+                  variants={reveal}
+                  whileHover={{ y: -6 }}
+                  style={{ marginTop: 48 }}
+                >
+                  <div style={styles.goalPanel}>
+                    <p style={styles.goalText}>
+                      My goal is to build a successful and stable future for myself. I want
+                      to keep improving my skills, gain experience, and become someone who
+                      is confident, capable, and respected in a professional environment.
+                      I am focused on growth, consistency, and making something of myself
+                      that I can truly be proud of.
+                    </p>
+                  </div>
+                </motion.div>
+              </div>
+            </section>
+
+            <section id="contact" style={styles.sectionAlt}>
+              <div style={styles.container}>
+                <motion.div
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true, amount: 0.2 }}
-                  variants={fadeUp}
-                  custom={index + 1}
-                  whileHover={{ y: -10 }}
+                  variants={reveal}
+                  style={styles.contactPanel}
                 >
-                  <div style={styles.darkCard}>
-                    <p style={styles.smallLabel}>{item.subtitle}</p>
-                    <h3 style={styles.cardTitle}>{item.title}</h3>
-                    <p style={styles.cardText}>{item.description}</p>
-                    <div style={styles.cardLine} />
+                  <div style={styles.contactGrid}>
+                    <div>
+                      <p style={styles.eyebrow}>Contact</p>
+                      <h2 style={styles.sectionTitle}>
+                        I’m ready for new opportunities, growth, and meaningful connections.
+                      </h2>
+                      <p style={styles.sectionText}>
+                        I want my next steps to reflect the work I’ve put into myself. I’m
+                        focused on moving forward with confidence, pride, and commitment.
+                      </p>
+                    </div>
+
+                    <div style={styles.contactButtons}>
+                      <a href="mailto:Keecadby2405@gmail.com" style={styles.primaryButton}>
+                        <MailIcon size={16} style={{ marginRight: 8 }} />
+                        Email Me
+                      </a>
+                      <a
+                        href="https://www.linkedin.com/in/keelie-cadby-967321337/"
+                        target="_blank"
+                        rel="noreferrer"
+                        style={styles.secondaryButton}
+                      >
+                        <LinkedInIcon size={16} style={{ marginRight: 8 }} />
+                        LinkedIn
+                      </a>
+                    </div>
                   </div>
                 </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="skills" style={styles.sectionWrap}>
-          <SectionIntro
-            eyebrow="Skills"
-            title="The strengths I am building into my future."
-text="These are the key skills I am developing as a Business Admin Apprentice to grow professionally and succeed in a structured working environment."
-          />
-
-          <div style={styles.skillsGrid}>
-            {skills.map((skill, index) => (
-              <motion.div
-                key={skill}
-                initial={{ opacity: 0, y: 18, scale: 0.96 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.05, duration: 0.45 }}
-                whileHover={{ y: -6, scale: 1.02 }}
-                style={styles.skillBox}
-              >
-                {skill}
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        <section id="goals" style={styles.sectionGoals}>
-          <div style={styles.container}>
-            <SectionIntro
-              eyebrow="My Goals"
-              title="I am focused on creating a future I can be proud of."
-              text="My goals are centred around growth, independence, professionalism, and becoming someone who is respected for her mindset, consistency, and ambition."
-            />
-
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.25 }}
-              variants={reveal}
-              whileHover={{ y: -6 }}
-              style={{ marginTop: 48 }}
-            >
-              <div style={styles.goalPanel}>
-                <p style={styles.goalText}>
-                  My goal is to build a successful and stable future for myself. I want
-                  to keep improving my skills, gain experience, and become someone who
-                  is confident, capable, and respected in a professional environment.
-                  I am focused on growth, consistency, and making something of myself
-                  that I can truly be proud of.
-                </p>
               </div>
-            </motion.div>
-          </div>
-        </section>
-
-        <section id="contact" style={styles.sectionWrap}>
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            variants={reveal}
-            style={styles.contactPanel}
-          >
-            <div style={styles.contactGrid}>
-              <div>
-                <p style={styles.eyebrow}>Contact</p>
-                <h2 style={styles.sectionTitle}>
-                  I’m ready for new opportunities, growth, and meaningful connections.
-                </h2>
-                <p style={styles.sectionText}>
-                  I want my next steps to reflect the work I’ve put into myself. I’m
-                  focused on moving forward with confidence, pride, and commitment.
-                </p>
-              </div>
-
-              <div style={styles.contactButtons}>
-                <a href="mailto:Keecadby2405@gmail.com" style={styles.primaryButton}>
-                  <MailIcon size={16} style={{ marginRight: 8 }} />
-                  Email Me
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/keelie-cadby-967321337/"
-                  target="_blank"
-                  rel="noreferrer"
-                  style={styles.secondaryButton}
-                >
-                  <LinkedInIcon size={16} style={{ marginRight: 8 }} />
-                  LinkedIn
-                </a>
-              </div>
-            </div>
-          </motion.div>
-               </section>
-      </main>
-    </div>
-  )}
-</>
-);
+            </section>
+          </main>
+        </div>
+      )}
+    </>
+  );
 }
 
 const styles = {
   captchaOverlay: {
-  position: "fixed",
-  inset: 0,
-  zIndex: 9999,
-  background: "rgba(9,11,16,0.92)",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  padding: 24,
-},
-
-captchaBox: {
-  width: "100%",
-  maxWidth: 560,
-  borderRadius: 30,
-  border: "1px solid rgba(255,255,255,0.10)",
-  background: "rgba(255,255,255,0.05)",
-  padding: 40,
-  backdropFilter: "blur(22px)",
-  boxShadow: "0 20px 50px rgba(0,0,0,0.20)",
-  textAlign: "center",
-},
+    position: "fixed",
+    inset: 0,
+    zIndex: 9999,
+    background: "rgba(9,11,16,0.92)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 24,
+  },
+  captchaBox: {
+    width: "100%",
+    maxWidth: 560,
+    borderRadius: 30,
+    border: "1px solid rgba(255,255,255,0.10)",
+    background: "rgba(255,255,255,0.05)",
+    padding: 40,
+    backdropFilter: "blur(22px)",
+    WebkitBackdropFilter: "blur(22px)",
+    boxShadow: "0 20px 50px rgba(0,0,0,0.20)",
+    textAlign: "center",
+  },
   page: {
-  minHeight: "100dvh",
-  overflowX: "hidden",
-  background: "#0d1117",
-  color: "white",
-  fontFamily: "Inter, system-ui, sans-serif",
-  position: "relative",
-  WebkitFontSmoothing: "antialiased",
-  MozOsxFontSmoothing: "grayscale",
-},
+    minHeight: "100dvh",
+    overflowX: "hidden",
+    background: "#0d1117",
+    color: "white",
+    fontFamily: "Inter, system-ui, sans-serif",
+    position: "relative",
+    WebkitFontSmoothing: "antialiased",
+    MozOsxFontSmoothing: "grayscale",
+  },
   progress: {
     position: "fixed",
     top: 0,
@@ -622,6 +628,7 @@ captchaBox: {
     borderBottom: "1px solid rgba(255,255,255,0.10)",
     background: "rgba(13,17,23,0.70)",
     backdropFilter: "blur(20px)",
+    WebkitBackdropFilter: "blur(20px)",
   },
   headerInner: {
     maxWidth: 1280,
@@ -685,23 +692,23 @@ captchaBox: {
     fontWeight: 600,
     boxShadow: "0 10px 30px rgba(236,72,153,0.20)",
   },
- heroSection: {
-  position: "relative",
-  minHeight: "100dvh",
-  display: "flex",
-  alignItems: "center",
-  overflow: "hidden",
-padding: "96px 20px 48px",
- },
+  heroSection: {
+    position: "relative",
+    minHeight: "100dvh",
+    display: "flex",
+    alignItems: "center",
+    overflow: "hidden",
+    padding: "96px 20px 48px",
+  },
   heroGrid: {
-  maxWidth: 1280,
-  margin: "0 auto",
-  width: "100%",
-  display: "grid",
-  gridTemplateColumns: "1fr",
-  gap: 24,
-  alignItems: "end",
-},
+    maxWidth: 1280,
+    margin: "0 auto",
+    width: "100%",
+    display: "grid",
+    gridTemplateColumns: "1fr",
+    gap: 24,
+    alignItems: "end",
+  },
   heroTag: {
     display: "inline-flex",
     alignItems: "center",
@@ -714,100 +721,101 @@ padding: "96px 20px 48px",
     textTransform: "uppercase",
     letterSpacing: "0.35em",
     backdropFilter: "blur(8px)",
+    WebkitBackdropFilter: "blur(8px)",
   },
-heroTitle: {
-  margin: "24px 0 0",
-  maxWidth: 820,
-fontSize: "clamp(2.2rem, 8vw, 5.5rem)",
-  fontWeight: 600,
-  lineHeight: 1.02,
-  letterSpacing: "-0.04em",
-  color: "#f8e7f1",
-},
- heroText: {
-  marginTop: 22,
-  maxWidth: 680,
-  fontSize: 16,
-  lineHeight: 1.75,
-  color: "rgba(255,255,255,0.82)",
-},
- heroButtons: {
-  marginTop: 28,
-  display: "flex",
-  flexDirection: "column",
-  gap: 24,
-},
+  heroTitle: {
+    margin: "24px 0 0",
+    maxWidth: 820,
+    fontSize: "clamp(2.2rem, 8vw, 5.5rem)",
+    fontWeight: 600,
+    lineHeight: 1.02,
+    letterSpacing: "-0.04em",
+    color: "#f8e7f1",
+  },
+  heroText: {
+    marginTop: 22,
+    maxWidth: 680,
+    fontSize: 16,
+    lineHeight: 1.75,
+    color: "rgba(255,255,255,0.82)",
+  },
+  heroButtons: {
+    marginTop: 28,
+    display: "flex",
+    flexDirection: "column",
+    gap: 16,
+  },
   primaryButton: {
-  display: "inline-flex",
-  alignItems: "center",
-  justifyContent: "center",
-  borderRadius: 999,
-  background: "#f472b6",
-  color: "#111827",
-  textDecoration: "none",
-  padding: "16px 24px",
-  minHeight: 52,
-  fontSize: 15,
-  fontWeight: 600,
-  boxShadow: "0 12px 30px rgba(236,72,153,0.16)",
-},
-secondaryButton: {
-  display: "inline-flex",
-  alignItems: "center",
-  justifyContent: "center",
-  borderRadius: 999,
-  border: "1px solid rgba(255,255,255,0.15)",
-  background: "rgba(255,255,255,0.06)",
-  color: "#ffffff",
-  textDecoration: "none",
-  padding: "16px 24px",
-  minHeight: 52,
-  fontSize: 15,
-  fontWeight: 600,
-  backdropFilter: "blur(10px)",
-  WebkitBackdropFilter: "blur(10px)",
-},
-storyGrid: {
-  display: "grid",
-  gridTemplateColumns: "1fr",
-  gap: 14,
-},
-glassCard: {
-  borderRadius: 24,
-  border: "1px solid rgba(255,255,255,0.12)",
-  background: "rgba(255,255,255,0.06)",
-  padding: 22,
-  backdropFilter: "blur(16px)",
-  WebkitBackdropFilter: "blur(16px)",
-  boxShadow: "0 16px 40px rgba(0,0,0,0.18)",
-},
- pinkCard: {
-  borderRadius: 24,
-  border: "1px solid rgba(244,114,182,0.24)",
-  background: "rgba(244,114,182,0.12)",
-  padding: 22,
-  backdropFilter: "blur(16px)",
-  WebkitBackdropFilter: "blur(16px)",
-  boxShadow: "0 16px 40px rgba(236,72,153,0.10)",
-},
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 999,
+    background: "#f472b6",
+    color: "#111827",
+    textDecoration: "none",
+    padding: "16px 24px",
+    minHeight: 52,
+    fontSize: 15,
+    fontWeight: 600,
+    boxShadow: "0 12px 30px rgba(236,72,153,0.16)",
+  },
+  secondaryButton: {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 999,
+    border: "1px solid rgba(255,255,255,0.15)",
+    background: "rgba(255,255,255,0.06)",
+    color: "#ffffff",
+    textDecoration: "none",
+    padding: "16px 24px",
+    minHeight: 52,
+    fontSize: 15,
+    fontWeight: 600,
+    backdropFilter: "blur(10px)",
+    WebkitBackdropFilter: "blur(10px)",
+  },
+  storyGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+    gap: 14,
+  },
+  glassCard: {
+    borderRadius: 24,
+    border: "1px solid rgba(255,255,255,0.12)",
+    background: "rgba(255,255,255,0.06)",
+    padding: 22,
+    backdropFilter: "blur(16px)",
+    WebkitBackdropFilter: "blur(16px)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.18)",
+  },
+  pinkCard: {
+    borderRadius: 24,
+    border: "1px solid rgba(244,114,182,0.24)",
+    background: "rgba(244,114,182,0.12)",
+    padding: 22,
+    backdropFilter: "blur(16px)",
+    WebkitBackdropFilter: "blur(16px)",
+    boxShadow: "0 16px 40px rgba(236,72,153,0.10)",
+  },
   glassCardLarge: {
-  borderRadius: 26,
-  border: "1px solid rgba(255,255,255,0.12)",
-  background: "rgba(255,255,255,0.06)",
-  padding: 28,
-  backdropFilter: "blur(18px)",
-  WebkitBackdropFilter: "blur(18px)",
-  boxShadow: "0 16px 40px rgba(0,0,0,0.18)",
-},
-pinkCardLarge: {
-  borderRadius: 26,
-  border: "1px solid rgba(244,114,182,0.22)",
-  background: "rgba(244,114,182,0.12)",
-  padding: 28,
-  backdropFilter: "blur(18px)",
-  WebkitBackdropFilter: "blur(18px)",
-  boxShadow: "0 16px 40px rgba(236,72,153,0.10)",
-},
+    borderRadius: 26,
+    border: "1px solid rgba(255,255,255,0.12)",
+    background: "rgba(255,255,255,0.06)",
+    padding: 28,
+    backdropFilter: "blur(18px)",
+    WebkitBackdropFilter: "blur(18px)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.18)",
+  },
+  pinkCardLarge: {
+    borderRadius: 26,
+    border: "1px solid rgba(244,114,182,0.22)",
+    background: "rgba(244,114,182,0.12)",
+    padding: 28,
+    backdropFilter: "blur(18px)",
+    WebkitBackdropFilter: "blur(18px)",
+    boxShadow: "0 16px 40px rgba(236,72,153,0.10)",
+  },
   scrollPill: {
     position: "absolute",
     left: "50%",
@@ -825,27 +833,28 @@ pinkCardLarge: {
     textTransform: "uppercase",
     letterSpacing: "0.28em",
     backdropFilter: "blur(8px)",
+    WebkitBackdropFilter: "blur(8px)",
   },
   sectionWrap: {
-  maxWidth: 1200,
-  margin: "0 auto",
-  padding: "72px 20px",
-},
- sectionAlt: {
-  borderTop: "1px solid rgba(255,255,255,0.10)",
-  borderBottom: "1px solid rgba(255,255,255,0.10)",
-  background: "rgba(255,255,255,0.03)",
-  padding: "72px 20px",
-},
- sectionGoals: {
-  position: "relative",
-  overflow: "hidden",
-  borderTop: "1px solid rgba(255,255,255,0.10)",
-  borderBottom: "1px solid rgba(255,255,255,0.10)",
-  padding: "72px 20px",
-  background:
-    "radial-gradient(circle at top right, rgba(236,72,153,0.12), transparent 32%)",
-},
+    maxWidth: 1200,
+    margin: "0 auto",
+    padding: "72px 20px",
+  },
+  sectionAlt: {
+    borderTop: "1px solid rgba(255,255,255,0.10)",
+    borderBottom: "1px solid rgba(255,255,255,0.10)",
+    background: "rgba(255,255,255,0.03)",
+    padding: "72px 20px",
+  },
+  sectionGoals: {
+    position: "relative",
+    overflow: "hidden",
+    borderTop: "1px solid rgba(255,255,255,0.10)",
+    borderBottom: "1px solid rgba(255,255,255,0.10)",
+    padding: "72px 20px",
+    background:
+      "radial-gradient(circle at top right, rgba(236,72,153,0.12), transparent 32%)",
+  },
   container: {
     maxWidth: 1200,
     margin: "0 auto",
@@ -864,20 +873,20 @@ pinkCardLarge: {
     letterSpacing: "0.35em",
     color: "rgba(251,207,232,0.70)",
   },
- sectionTitle: {
-  margin: "14px 0 0",
-  fontSize: "clamp(2rem, 7vw, 2.9rem)",
-  fontWeight: 600,
-  letterSpacing: "-0.03em",
-  lineHeight: 1.08,
-  color: "#f8e7f1",
-},
+  sectionTitle: {
+    margin: "14px 0 0",
+    fontSize: "clamp(2rem, 7vw, 2.9rem)",
+    fontWeight: 600,
+    letterSpacing: "-0.03em",
+    lineHeight: 1.08,
+    color: "#f8e7f1",
+  },
   sectionText: {
-  marginTop: 18,
-  fontSize: 16,
-  lineHeight: 1.8,
-  color: "rgba(255,255,255,0.82)",
-  maxWidth: 760,
+    marginTop: 18,
+    fontSize: 16,
+    lineHeight: 1.8,
+    color: "rgba(255,255,255,0.82)",
+    maxWidth: 760,
   },
   largeCopy: {
     marginTop: 20,
@@ -885,18 +894,18 @@ pinkCardLarge: {
     lineHeight: 1.9,
     color: "rgba(231,229,228,0.86)",
   },
-twoCol: {
-  display: "grid",
-  gridTemplateColumns: "1fr",
-  gap: 24,
-  marginTop: 36,
-},
- cardGrid3: {
-  display: "grid",
-  gridTemplateColumns: "1fr",
-  gap: 24,
-  marginTop: 36,
-},
+  twoCol: {
+    display: "grid",
+    gridTemplateColumns: "1fr",
+    gap: 24,
+    marginTop: 36,
+  },
+  cardGrid3: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+    gap: 24,
+    marginTop: 36,
+  },
   darkCard: {
     height: "100%",
     borderRadius: 30,
@@ -904,6 +913,7 @@ twoCol: {
     background: "rgba(19,26,35,0.90)",
     padding: 32,
     backdropFilter: "blur(18px)",
+    WebkitBackdropFilter: "blur(18px)",
     boxShadow: "0 20px 50px rgba(0,0,0,0.20)",
   },
   cardTitle: {
@@ -924,31 +934,32 @@ twoCol: {
     background:
       "linear-gradient(to right, rgba(244,114,182,0.50), rgba(251,207,232,0.20), transparent)",
   },
- skillsGrid: {
-  display: "grid",
-  gridTemplateColumns: "1fr 1fr",
-  gap: 20,
-  marginTop: 36,
-},
-skillBox: {
-  borderRadius: 20,
-  border: "1px solid rgba(244,114,182,0.14)",
-  background: "rgba(244,114,182,0.10)",
-  padding: "18px 14px",
-  textAlign: "center",
-  fontSize: 15,
-  fontWeight: 500,
-  color: "#fce7f3",
-  backdropFilter: "blur(14px)",
-  WebkitBackdropFilter: "blur(14px)",
-  boxShadow: "0 10px 24px rgba(236,72,153,0.05)",
-},
+  skillsGrid: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: 20,
+    marginTop: 36,
+  },
+  skillBox: {
+    borderRadius: 20,
+    border: "1px solid rgba(244,114,182,0.14)",
+    background: "rgba(244,114,182,0.10)",
+    padding: "18px 14px",
+    textAlign: "center",
+    fontSize: 15,
+    fontWeight: 500,
+    color: "#fce7f3",
+    backdropFilter: "blur(14px)",
+    WebkitBackdropFilter: "blur(14px)",
+    boxShadow: "0 10px 24px rgba(236,72,153,0.05)",
+  },
   goalPanel: {
     borderRadius: 34,
     border: "1px solid rgba(255,255,255,0.10)",
     background: "rgba(255,255,255,0.05)",
     padding: 48,
     backdropFilter: "blur(22px)",
+    WebkitBackdropFilter: "blur(22px)",
     boxShadow: "0 20px 50px rgba(0,0,0,0.20)",
   },
   goalText: {
@@ -958,23 +969,23 @@ skillBox: {
     color: "rgba(231,229,228,0.86)",
   },
   contactPanel: {
-  borderRadius: 28,
-  border: "1px solid rgba(255,255,255,0.12)",
-  background: "rgba(255,255,255,0.06)",
-  padding: 28,
-  backdropFilter: "blur(18px)",
-  WebkitBackdropFilter: "blur(18px)",
-  boxShadow: "0 16px 40px rgba(0,0,0,0.18)",
-},
-contactGrid: {
-  display: "grid",
-  gridTemplateColumns: "1fr",
-  gap: 24,
-  alignItems: "end",
-},
- contactButtons: {
-  display: "flex",
-  flexDirection: "column",
-  gap: 20,
-},
+    borderRadius: 28,
+    border: "1px solid rgba(255,255,255,0.12)",
+    background: "rgba(255,255,255,0.06)",
+    padding: 28,
+    backdropFilter: "blur(18px)",
+    WebkitBackdropFilter: "blur(18px)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.18)",
+  },
+  contactGrid: {
+    display: "grid",
+    gridTemplateColumns: "1fr",
+    gap: 24,
+    alignItems: "end",
+  },
+  contactButtons: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 20,
+  },
 };
