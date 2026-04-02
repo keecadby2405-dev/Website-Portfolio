@@ -255,8 +255,8 @@ useEffect(() => {
       </header>
 
       <main>
-        <section style={styles.heroSection}>
-          <motion.div
+<section id="about" style={styles.heroSection}>
+  <motion.div
             style={{ ...styles.heroGrid, y: heroY, opacity: heroOpacity }}
           >
             <div>
@@ -399,8 +399,8 @@ useEffect(() => {
           </div>
         </section>
 
-        <section id="experience" style={styles.sectionAlt}>
-          <div style={styles.container}>
+       <section id="experience">
+  <div style={styles.cardsGrid}>
             <SectionIntro
               eyebrow="Experience"
               title="My experience reflects growth, discipline, and mindset."
