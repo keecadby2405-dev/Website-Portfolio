@@ -171,7 +171,7 @@ export default function Portfolio() {
     const timer = setTimeout(() => {
       if (window.turnstile && document.getElementById("turnstile-container")) {
         window.turnstile.render("#turnstile-container", {
-          sitekey: "YOUR_SITE_KEY_HERE",
+          sitekey: "0x4AAAAAACy9qo372FzJWivY",
           theme: "dark",
           callback: () => setVerified(true),
         });
