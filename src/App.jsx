@@ -15,7 +15,7 @@ const ACHIEVEMENTS = [
   { icon:"🎖️", title:"Flight Sergeant – RAF Air Cadets", desc:"Progressed to Flight Sergeant since joining in 2021. Qualified to teach new cadets in classifications and various areas of learning as part of the training team." },
   { icon:"🛡️", title:"Leadership Courses", desc:"Completed Bronze and Silver Leadership Courses, Method of Instruction, Cadet Drill Course, and Master Air Cadet Classification." },
   { icon:"🔐", title:"Cyber Security", desc:"Introduction to Cyber Security (OpenLearn), Bronze and Silver Cyber Courses. Passionate about pursuing a career in cybersecurity or aviation technology." },
-  { icon:"🤝", title:"OVOS Volunteer", desc:"Part of Our Voice Our Service since ~2017, supporting care-experienced young people. Chaired interview panels and represented young people's voices at events." },
+  { icon:"🤝", title:"Our Voice Our Service (OVOS)", desc:"Active member since ~2017 — chaired interview panels for social workers, spoken to council members to identify community and care change needs, and helped ensure care-experienced young people's voices shape the services that support them." },
   { icon:"🏥", title:"Care Certificate & VTQs", desc:"Care Certificate (Sep 2025), Customer Service L2, Complaint Handling L1, Presentation Skills L1, GDPR Certified, Equality Act 2010 Certified." },
   { icon:"🚶", title:"Road Marching", desc:"Completed 15km, 20km and 25km road marches, Basic First Aid, and Radio Basic Operator qualification." },
 ];
@@ -582,7 +582,7 @@ export default function Portfolio() {
                   </div>
                   <div style={{display:"flex",flexDirection:"column",gap:16}}>
                     {[
-                      { icon:"💜", title:"OVOS Volunteer", desc:"Since ~2017, I've supported care-experienced young people through Our Voice Our Service — ensuring their voices are heard and represented at the highest level." },
+                      { icon:"💜", title:"Our Voice Our Service (OVOS)", desc:"Since ~2017, I've been an active member of OVOS — charing interview panels for social workers, speaking directly to council members to identify change needs in the community, and helping shape care services so young people feel genuinely seen and heard." },
                       { icon:"🎖️", title:"RAF Cadet Instructor", desc:"As a Flight Sergeant, I teach and mentor young cadets every week — giving them the same belief in themselves that I had to find on my own." },
                       { icon:"🌟", title:"Leading by Example", desc:"I want young people to look at my journey — from care to apprentice, Flight Sergeant, and international exchange — and know that their start does not define their future." },
                     ].map((card,i)=>(
