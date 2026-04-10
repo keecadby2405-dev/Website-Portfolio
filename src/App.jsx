@@ -1,991 +1,509 @@
-import { useEffect, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
 
-const experienceItems = [
+const NAV = ["Home","About","Experience","Skills","Achievements","Goals","Contact"];
+
+const EXPERIENCE = [
   {
-    title: "Developing Myself Professionally",
-    subtitle: "Growing with purpose",
-    description:
-      "I am constantly building my communication, organisation and confidence so I can present myself professionally and take on new opportunities with clarity and focus.",
+    role: "Apprentice Business Administrator",
+    company: "Auxilio Care Ltd",
+    period: "Aug 2025 – Present",
+    type: "Full-time Apprenticeship · 30 hrs/week",
+    bullets: [
+      "Day-to-day administrative support across Auxilio Care and Aurum Housing",
+      "Maintaining accurate records, filing systems and databases",
+      "Managing correspondence — emails, letters and phone calls",
+      "Diary and calendar management for managers and teams",
+      "HR admin: personnel files, training records and compliance documentation",
+      "Supporting compliance audits and regulatory requirements",
+      "Preparation and documentation for interviews",
+    ],
   },
   {
-    title: "Overcoming Challenges",
-    subtitle: "Turning setbacks into strength",
-    description:
-      "I have faced challenges that have shaped my mindset. Instead of holding me back, they have made me stronger, more disciplined and more determined to succeed.",
+    role: "Assistant Administrator",
+    company: "Auxilio Care Ltd",
+    period: "Jul 2024 – Sep 2024",
+    type: "Work Experience · 2 days/week",
+    bullets: [
+      "Managed and updated client files and internal systems",
+      "Maintained spreadsheets for staff training records",
+      "Checked and monitored PPE stock for care staff",
+      "Supported co-workers with outstanding tasks",
+    ],
   },
   {
-    title: "My Mindset",
-    subtitle: "Pride and commitment",
-    description:
-      "I take pride in who I am becoming. I show up with confidence, put effort into everything I do, and stay committed to building a better future for myself.",
+    role: "Charity Shop Volunteer",
+    company: "YMCA",
+    period: "May 2023 – Jun 2023",
+    type: "Volunteer",
+    bullets: [
+      "Designed attractive window and shop floor displays",
+      "Provided advice and guidance to customers",
+      "Processed, labelled and displayed donations to maximise sales",
+      "Assessed donated goods to ensure quality and presentation",
+    ],
   },
 ];
 
-const skills = [
-  "Communication",
-  "Confidence",
-  "Adaptability",
-  "Teamwork",
-  "Creativity",
-  "Professionalism",
-  "Commitment",
-  "Resilience",
+const SKILLS = [
+  "Administration Support","Microsoft 365","Data Entry","Document Management",
+  "Office Administration","Diary Management","Attention to Detail","Confidentiality",
+  "Written Communication","Verbal Communication","Multitasking","Organisation",
+  "Presentation Skills","Decision Making","Calm Under Pressure","Active Listening",
+  "Leadership","Team Building","Social Media","Willingness to Learn",
 ];
 
-const storyPoints = [
-  "Where I come from has shaped my mindset.",
-  "Where I am now reflects growth and perseverance.",
-  "Where I am going is driven by ambition and self-belief.",
+const ACHIEVEMENTS = [
+  { icon: "✈️", title: "RAFAC International Exchange 2026", desc: "Competitively selected for a prestigious international exchange programme to the USA — involving aviation exposure and leadership engagement with allied air cadet organisations." },
+  { icon: "🎖️", title: "Flight Sergeant – RAF Air Cadets", desc: "Progressed to Flight Sergeant since joining in 2021. Qualified to teach new cadets in classifications and various areas of learning as part of the training team." },
+  { icon: "🛡️", title: "Leadership Courses", desc: "Completed Bronze and Silver Leadership Courses, Method of Instruction, Cadet Drill Course, and Master Air Cadet Classification." },
+  { icon: "🔐", title: "Cyber Security", desc: "Introduction to Cyber Security (OpenLearn), Bronze and Silver Cyber Courses. Passionate about pursuing a career in cybersecurity or aviation technology." },
+  { icon: "🤝", title: "OVOS Volunteer", desc: "Part of Our Voice Our Service since ~2017, supporting care-experienced young people. Chaired interview panels and represented young people's voices at events." },
+  { icon: "🏥", title: "Care Certificate & VTQs", desc: "Care Certificate (Sep 2025), Customer Service L2, Complaint Handling L1, Presentation Skills L1, GDPR Certified, Equality Act 2010 Certified." },
+  { icon: "🚶", title: "Road Marching", desc: "Completed 15km, 20km and 25km road marches, Basic First Aid, and Radio Basic Operator qualification." },
 ];
 
-function IconWrapper({ children, size = 20, style = {} }) {
+const EDUCATION = [
+  { year: "2024", qual: "Level 2 Business Support & Level 1 Business Admin", place: "Barnardo's Study Programme, Midlands ETS" },
+  { year: "2023", qual: "GCSE English Language (5), GCSE Fine Art (4), ASDAN L1 Award of Personal Effectiveness", place: "The Triple Crown Centre, Solihull" },
+];
+
+function useInView(threshold = 0.15) {
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setInView(true); }, { threshold });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, inView];
+}
+
+function FadeIn({ children, delay = 0, y = 24 }) {
+  const [ref, inView] = useInView();
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      width={size}
-      height={size}
-      aria-hidden="true"
-      style={style}
-    >
+    <div ref={ref} style={{
+      opacity: inView ? 1 : 0,
+      transform: inView ? "translateY(0)" : `translateY(${y}px)`,
+      transition: `opacity 0.7s ease ${delay}s, transform 0.7s ease ${delay}s`,
+    }}>
       {children}
-    </svg>
-  );
-}
-
-function MailIcon({ size = 18, style = {} }) {
-  return (
-    <IconWrapper size={size} style={style}>
-      <rect x="3" y="5" width="18" height="14" rx="2" />
-      <path d="M4 7l8 6 8-6" />
-    </IconWrapper>
-  );
-}
-
-function LinkedInIcon({ size = 18, style = {} }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      width={size}
-      height={size}
-      aria-hidden="true"
-      style={style}
-    >
-      <path d="M6.94 8.5a1.56 1.56 0 1 0 0-3.12 1.56 1.56 0 0 0 0 3.12ZM5.6 9.75h2.68V18H5.6V9.75Zm4.36 0h2.57v1.13h.04c.36-.68 1.23-1.39 2.53-1.39 2.7 0 3.2 1.78 3.2 4.1V18h-2.68v-3.91c0-.93-.02-2.13-1.3-2.13-1.31 0-1.51 1.02-1.51 2.06V18H9.96V9.75Z" />
-    </svg>
-  );
-}
-
-function ArrowDownIcon({ size = 16, style = {} }) {
-  return (
-    <IconWrapper size={size} style={style}>
-      <path d="M12 5v14" />
-      <path d="m6 13 6 6 6-6" />
-    </IconWrapper>
-  );
-}
-
-function StarIcon({ size = 18, style = {} }) {
-  return (
-    <IconWrapper size={size} style={style}>
-      <path d="M12 3.5l2.5 5.05 5.58.81-4.04 3.94.95 5.56L12 16.95 7.01 18.86l.95-5.56-4.04-3.94 5.58-.81L12 3.5Z" />
-    </IconWrapper>
-  );
-}
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.1,
-      duration: 0.8,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  }),
-};
-
-const reveal = {
-  hidden: { opacity: 0, y: 32 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  },
-};
-
-function SectionIntro({ eyebrow, title, text }) {
-  return (
-    <motion.div
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.3 }}
-      variants={reveal}
-      style={{ maxWidth: 760 }}
-    >
-      <p style={styles.eyebrow}>{eyebrow}</p>
-      <h2 style={styles.sectionTitle}>{title}</h2>
-      <p style={styles.sectionText}>{text}</p>
-    </motion.div>
-  );
-}
-
-function StoryCard({ text, wide }) {
-  return (
-    <motion.div
-      whileHover={{ y: -8, scale: 1.01 }}
-      transition={{ duration: 0.3 }}
-      style={{
-        ...styles.glassCard,
-        minHeight: 150,
-        gridColumn: wide ? "span 2" : "span 1",
-      }}
-    >
-      <p style={styles.smallLabel}>Personal focus</p>
-      <p style={{ fontSize: 28, lineHeight: 1.2, fontWeight: 600, marginTop: 32 }}>
-        {text}
-      </p>
-    </motion.div>
+    </div>
   );
 }
 
 export default function Portfolio() {
-  const { scrollYProgress } = useScroll();
-  const heroY = useTransform(scrollYProgress, [0, 0.25], [0, -120]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0.35]);
-  const progressScaleX = useTransform(scrollYProgress, [0, 1], [0, 1]);
-
-  const [verified, setVerified] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+  const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (window.turnstile && document.getElementById("turnstile-container")) {
-        window.turnstile.render("#turnstile-container", {
-          sitekey: "0x4AAAAAACy9qo372FzJWivY",
-          theme: "dark",
-          callback: () => setVerified(true),
-        });
-      }
-    }, 100);
-
-    return () => clearTimeout(timer);
+    const onScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const scrollTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    setMenuOpen(false);
+  };
+
+  const progress = Math.min(scrollY / (document.body?.scrollHeight - window.innerHeight || 1), 1);
+
+  const s = styles;
+
   return (
-    <>
-      {!verified && (
-        <div style={styles.captchaOverlay}>
-          <div style={styles.captchaBox}>
-            <p style={styles.eyebrow}>Verification</p>
-            <h2 style={styles.sectionTitle}>Please verify to enter my portfolio</h2>
-            <p style={styles.sectionText}>
-              Complete the security check to continue to my website.
-            </p>
+    <div style={s.page}>
+      {/* Progress bar */}
+      <div style={{ ...s.progressBar, width: `${progress * 100}%` }} />
 
-            <div
-              id="turnstile-container"
-              style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}
-            ></div>
-          </div>
-        </div>
-      )}
+      {/* Backgrounds */}
+      <div style={s.bgBase} />
+      <div style={s.orbL} />
+      <div style={s.orbR} />
+      <div style={s.bgGlow} />
+      <div style={s.bgGrid} />
 
-      {verified && (
-        <div style={styles.page}>
-          <motion.div
-            style={{
-              ...styles.progress,
-              scaleX: progressScaleX,
-              transformOrigin: "0% 50%",
-            }}
-          />
-
-          <div style={styles.backgroundBase} />
-          <motion.div
-            style={styles.orbLeft}
-            animate={{ y: [0, -20, 0] }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div
-            style={styles.orbRight}
-            animate={{ y: [0, 20, 0] }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <div style={styles.backgroundGlow} />
-          <div style={styles.backgroundGrid} />
-
-          <header style={styles.header}>
-            <div style={styles.headerInner}>
-              <motion.div
-                initial={{ opacity: 0, y: -18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7 }}
-                style={styles.brand}
-              >
-                <div style={styles.logoCircle}>
-                  <StarIcon size={18} />
-                </div>
-                <div>
-                  <p style={styles.brandTop}>Keelie Cadby</p>
-                  <p style={styles.brandBottom}>My Portfolio</p>
-                </div>
-              </motion.div>
-
-              <nav style={styles.nav}>
-                <a href="#home" style={styles.navLink}>Home</a>
-                <a href="#about" style={styles.navLink}>About</a>
-                <a href="#experience" style={styles.navLink}>Experience</a>
-                <a href="#skills" style={styles.navLink}>Skills</a>
-                <a href="#goals" style={styles.navLink}>Goals</a>
-                <a href="#contact" style={styles.navLink}>Contact</a>
-              </nav>
-
-              <a href="#contact" style={styles.contactButtonTop}>Contact Me</a>
+      {/* Header */}
+      <header style={s.header}>
+        <div style={s.headerInner}>
+          <div style={s.brand}>
+            <div style={s.logoCircle}>KC</div>
+            <div>
+              <p style={s.brandTop}>Keelie Cadby</p>
+              <p style={s.brandSub}>Portfolio</p>
             </div>
-          </header>
+          </div>
 
-          <main>
-            <section id="home" style={styles.heroSection}>
-              <motion.div
-                style={{ ...styles.heroGrid, y: heroY, opacity: heroOpacity }}
-              >
-                <div>
-                  <motion.p
-                    initial="hidden"
-                    animate="visible"
-                    custom={0}
-                    variants={fadeUp}
-                    style={styles.heroTag}
-                  >
-                    My story • My growth • My future
-                  </motion.p>
+          {/* Desktop nav */}
+          <nav style={s.desktopNav}>
+            {NAV.map(n => (
+              <button key={n} onClick={() => scrollTo(n.toLowerCase())} style={s.navBtn}>{n}</button>
+            ))}
+          </nav>
 
-                  <motion.h1
-                    initial="hidden"
-                    animate="visible"
-                    custom={1}
-                    variants={fadeUp}
-                    style={styles.heroTitle}
-                  >
-                    I’m a Business Admin Apprentice building my future with confidence, resilience, and ambition.
-                  </motion.h1>
+          <button onClick={() => scrollTo("contact")} style={s.contactBtnTop}>Contact Me</button>
 
-                  <motion.p
-                    initial="hidden"
-                    animate="visible"
-                    custom={2}
-                    variants={fadeUp}
-                    style={styles.heroText}
-                  >
-                    I know where I come from, I know how much I’ve grown, and I’m focused on where I’m going. As a Business Admin Apprentice, I am gaining real experience while continuing to improve, learn, and build a strong future for myself.
-                  </motion.p>
-
-                  <motion.div
-                    initial="hidden"
-                    animate="visible"
-                    custom={3}
-                    variants={fadeUp}
-                    style={styles.heroButtons}
-                  >
-                    <a href="mailto:Keecadby2405@gmail.com" style={styles.primaryButton}>
-                      <MailIcon size={16} style={{ marginRight: 8 }} />
-                      Email Me
-                    </a>
-                    <a
-                      href="https://www.linkedin.com/in/keelie-cadby-967321337/"
-                      target="_blank"
-                      rel="noreferrer"
-                      style={styles.secondaryButton}
-                    >
-                      <LinkedInIcon size={16} style={{ marginRight: 8 }} />
-                      LinkedIn
-                    </a>
-                  </motion.div>
-                </div>
-
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.94, y: 30 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-                  style={styles.storyGrid}
-                >
-                  <StoryCard text={storyPoints[0]} wide />
-                  <StoryCard text={storyPoints[1]} />
-                  <StoryCard text={storyPoints[2]} />
-                  <motion.div whileHover={{ y: -8 }} style={styles.pinkCard}>
-                    <p style={{ ...styles.smallLabel, color: "rgba(255,232,242,0.85)" }}>
-                      Mindset
-                    </p>
-                    <p style={{ fontSize: 17, lineHeight: 1.9, marginTop: 16 }}>
-                      I take pride in how far I’ve come, and I stay committed to becoming
-                      more capable, more confident, and more ready for every opportunity ahead.
-                    </p>
-                  </motion.div>
-                </motion.div>
-              </motion.div>
-
-              <motion.a
-                href="#about"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.1, duration: 0.7 }}
-                style={styles.scrollPill}
-              >
-                Scroll
-                <motion.span
-                  animate={{ y: [0, 6, 0] }}
-                  transition={{ repeat: Infinity, duration: 1.8 }}
-                  style={{ display: "inline-flex", marginLeft: 8 }}
-                >
-                  <ArrowDownIcon size={14} />
-                </motion.span>
-              </motion.a>
-            </section>
-
-            <section id="about" style={styles.sectionAlt}>
-              <div style={styles.container}>
-                <SectionIntro
-                  eyebrow="About Me"
-                  title="My journey has shaped the person I am becoming."
-                  text="I haven’t had the easiest journey, but that is exactly what has built my strength. I have learned how to keep going, stay focused, and believe in myself even through difficult moments. Everything I have been through has developed my confidence and made me more determined to succeed. I take pride in my growth, and I am committed to continuing that progress."
-                />
-
-                <div style={styles.twoCol}>
-                  <motion.div
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.2 }}
-                    variants={reveal}
-                    whileHover={{ y: -6 }}
-                  >
-                    <div style={styles.glassCardLarge}>
-                      <p style={styles.eyebrow}>Where I come from</p>
-                      <p style={styles.largeCopy}>
-                        My background has taught me resilience, patience, and self-respect.
-                        It has shown me that growth takes effort and that becoming the person
-                        I want to be is something I build every day.
-                      </p>
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.2 }}
-                    variants={reveal}
-                    transition={{ delay: 0.1 }}
-                    whileHover={{ y: -6 }}
-                  >
-                    <div style={styles.pinkCardLarge}>
-                      <p style={{ ...styles.eyebrow, color: "rgba(255,232,242,0.85)" }}>
-                        Where I am now
-                      </p>
-                      <p style={{ ...styles.largeCopy, color: "rgba(255,255,255,0.92)" }}>
-                        I am in a stage of real growth. I am learning, improving, and pushing
-                        myself to become more professional, more capable, and more prepared
-                        for the future I want.
-                      </p>
-                    </div>
-                  </motion.div>
-                </div>
-              </div>
-            </section>
-
-            <section id="experience" style={styles.sectionAlt}>
-              <div style={styles.container}>
-                <SectionIntro
-                  eyebrow="Experience"
-                  title="My experience reflects growth, discipline, and mindset."
-                  text="This section highlights how I am developing professionally, how I respond to challenges, and the attitude I bring into everything I do."
-                />
-
-                <div style={styles.cardGrid3}>
-                  {experienceItems.map((item, index) => (
-                    <motion.div
-                      key={item.title}
-                      initial="hidden"
-                      whileInView="visible"
-                      viewport={{ once: true, amount: 0.2 }}
-                      variants={fadeUp}
-                      custom={index + 1}
-                      whileHover={{ y: -10 }}
-                    >
-                      <div style={styles.darkCard}>
-                        <p style={styles.smallLabel}>{item.subtitle}</p>
-                        <h3 style={styles.cardTitle}>{item.title}</h3>
-                        <p style={styles.cardText}>{item.description}</p>
-                        <div style={styles.cardLine} />
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </section>
-
-            <section id="skills" style={styles.sectionAlt}>
-              <div style={styles.container}>
-                <SectionIntro
-                  eyebrow="Skills"
-                  title="The strengths I am building into my future."
-                  text="These are the key skills I am developing as a Business Admin Apprentice to grow professionally and succeed in a structured working environment."
-                />
-
-                <div style={styles.skillsGrid}>
-                  {skills.map((skill, index) => (
-                    <motion.div
-                      key={skill}
-                      initial={{ opacity: 0, y: 18, scale: 0.96 }}
-                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.05, duration: 0.45 }}
-                      whileHover={{ y: -6, scale: 1.02 }}
-                      style={styles.skillBox}
-                    >
-                      {skill}
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </section>
-
-            <section id="goals" style={styles.sectionGoals}>
-              <div style={styles.container}>
-                <SectionIntro
-                  eyebrow="My Goals"
-                  title="I am focused on creating a future I can be proud of."
-                  text="My goals are centred around growth, independence, professionalism, and becoming someone who is respected for her mindset, consistency, and ambition."
-                />
-
-                <motion.div
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, amount: 0.25 }}
-                  variants={reveal}
-                  whileHover={{ y: -6 }}
-                  style={{ marginTop: 48 }}
-                >
-                  <div style={styles.goalPanel}>
-                    <p style={styles.goalText}>
-                      My goal is to build a successful and stable future for myself. I want
-                      to keep improving my skills, gain experience, and become someone who
-                      is confident, capable, and respected in a professional environment.
-                      I am focused on growth, consistency, and making something of myself
-                      that I can truly be proud of.
-                    </p>
-                  </div>
-                </motion.div>
-              </div>
-            </section>
-
-            <section id="contact" style={styles.sectionAlt}>
-              <div style={styles.container}>
-                <motion.div
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, amount: 0.2 }}
-                  variants={reveal}
-                  style={styles.contactPanel}
-                >
-                  <div style={styles.contactGrid}>
-                    <div>
-                      <p style={styles.eyebrow}>Contact</p>
-                      <h2 style={styles.sectionTitle}>
-                        I’m ready for new opportunities, growth, and meaningful connections.
-                      </h2>
-                      <p style={styles.sectionText}>
-                        I want my next steps to reflect the work I’ve put into myself. I’m
-                        focused on moving forward with confidence, pride, and commitment.
-                      </p>
-                    </div>
-
-                    <div style={styles.contactButtons}>
-                      <a href="mailto:Keecadby2405@gmail.com" style={styles.primaryButton}>
-                        <MailIcon size={16} style={{ marginRight: 8 }} />
-                        Email Me
-                      </a>
-                      <a
-                        href="https://www.linkedin.com/in/keelie-cadby-967321337/"
-                        target="_blank"
-                        rel="noreferrer"
-                        style={styles.secondaryButton}
-                      >
-                        <LinkedInIcon size={16} style={{ marginRight: 8 }} />
-                        LinkedIn
-                      </a>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-            </section>
-          </main>
+          {/* Hamburger */}
+          <button onClick={() => setMenuOpen(o => !o)} style={s.hamburger} aria-label="Menu">
+            <span style={{ ...s.bar, transform: menuOpen ? "rotate(45deg) translateY(7px)" : "none" }} />
+            <span style={{ ...s.bar, opacity: menuOpen ? 0 : 1 }} />
+            <span style={{ ...s.bar, transform: menuOpen ? "rotate(-45deg) translateY(-7px)" : "none" }} />
+          </button>
         </div>
-      )}
-    </>
+
+        {/* Mobile menu */}
+        {menuOpen && (
+          <div style={s.mobileMenu}>
+            {NAV.map(n => (
+              <button key={n} onClick={() => scrollTo(n.toLowerCase())} style={s.mobileNavBtn}>{n}</button>
+            ))}
+          </div>
+        )}
+      </header>
+
+      <main>
+        {/* HERO */}
+        <section id="home" style={s.hero}>
+          <div style={s.heroInner}>
+            <div style={s.heroLeft}>
+              <div style={s.heroTag}>Business Admin Apprentice · Birmingham, UK</div>
+              <h1 style={s.heroTitle}>
+                Building my future with <span style={s.pink}>confidence,</span> resilience & ambition.
+              </h1>
+              <p style={s.heroText}>
+                From RAF Air Cadets to a Business Admin Apprenticeship — I'm Keelie Cadby, a driven and organised professional growing every day in a real working environment.
+              </p>
+              <div style={s.heroBtns}>
+                <a href="mailto:keecadby2405@gmail.com" style={s.btnPrimary}>✉ Email Me</a>
+                <a href="https://www.linkedin.com/in/keelie-cadby-967321337/" target="_blank" rel="noreferrer" style={s.btnSecondary}>in LinkedIn</a>
+              </div>
+            </div>
+
+            <div style={s.heroCards}>
+              {[
+                { label: "Current Role", val: "Apprentice Business Admin" },
+                { label: "Organisation", val: "Auxilio Care Ltd" },
+                { label: "RAF Cadets Rank", val: "Flight Sergeant" },
+                { label: "Since", val: "2021" },
+              ].map((c, i) => (
+                <div key={i} style={{ ...s.statCard, ...(i % 2 === 1 ? s.statCardPink : {}) }}>
+                  <p style={s.statLabel}>{c.label}</p>
+                  <p style={s.statVal}>{c.val}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <a href="#about" onClick={e => { e.preventDefault(); scrollTo("about"); }} style={s.scrollPill}>
+            Scroll ↓
+          </a>
+        </section>
+
+        {/* ABOUT */}
+        <section id="about" style={s.section}>
+          <div style={s.container}>
+            <FadeIn>
+              <p style={s.eyebrow}>About Me</p>
+              <h2 style={s.secTitle}>My journey has shaped the person I'm becoming.</h2>
+              <p style={s.secText}>
+                I'm a highly organised and efficient Business Support student with strong administrative experience. I haven't had the easiest journey, but that's exactly what has built my strength. From progressing through the RAF Air Cadets to earning a competitive place on an international exchange to the USA, I've learned to show up with discipline, pride, and ambition every single day.
+              </p>
+            </FadeIn>
+
+            <div style={s.twoCol}>
+              {[
+                { t: "Where I Come From", p: "My background has built resilience, patience and self-respect. Everything I've faced has made me more determined and more capable. I've learned that growth takes effort — and I put that effort in every day." },
+                { t: "Where I'm Going", p: "I'm passionate about cybersecurity, aviation and technology. I'm building the professional foundation now through my apprenticeship so I can move confidently towards a career I'm truly excited about.", pink: true },
+              ].map((c, i) => (
+                <FadeIn key={i} delay={i * 0.1}>
+                  <div style={c.pink ? s.cardPinkLg : s.cardGlassLg}>
+                    <p style={{ ...s.eyebrow, color: c.pink ? "rgba(255,232,242,.85)" : undefined }}>{c.t}</p>
+                    <p style={{ ...s.lgCopy, color: c.pink ? "rgba(255,255,255,.92)" : undefined }}>{c.p}</p>
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
+
+            {/* Education */}
+            <FadeIn delay={0.1}>
+              <p style={{ ...s.eyebrow, marginTop: 56 }}>Education</p>
+              <div style={s.eduGrid}>
+                {EDUCATION.map((e, i) => (
+                  <div key={i} style={s.eduCard}>
+                    <span style={s.eduYear}>{e.year}</span>
+                    <div>
+                      <p style={s.eduQual}>{e.qual}</p>
+                      <p style={s.eduPlace}>{e.place}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </FadeIn>
+          </div>
+        </section>
+
+        {/* EXPERIENCE */}
+        <section id="experience" style={s.sectionAlt}>
+          <div style={s.container}>
+            <FadeIn>
+              <p style={s.eyebrow}>Experience</p>
+              <h2 style={s.secTitle}>Real work. Real growth. Real results.</h2>
+              <p style={s.secText}>From voluntary work to a full apprenticeship — every role has added to my professional development and shaped how I work.</p>
+            </FadeIn>
+
+            <div style={s.expList}>
+              {EXPERIENCE.map((ex, i) => (
+                <FadeIn key={i} delay={i * 0.08}>
+                  <div style={s.expCard}>
+                    <div style={s.expHeader}>
+                      <div>
+                        <h3 style={s.expRole}>{ex.role}</h3>
+                        <p style={s.expCompany}>{ex.company}</p>
+                      </div>
+                      <div style={s.expMeta}>
+                        <span style={s.expPeriod}>{ex.period}</span>
+                        <span style={s.expType}>{ex.type}</span>
+                      </div>
+                    </div>
+                    <ul style={s.expBullets}>
+                      {ex.bullets.map((b, j) => (
+                        <li key={j} style={s.expBullet}>
+                          <span style={s.bulletDot} />
+                          {b}
+                        </li>
+                      ))}
+                    </ul>
+                    <div style={s.cardLine} />
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* SKILLS */}
+        <section id="skills" style={s.section}>
+          <div style={s.container}>
+            <FadeIn>
+              <p style={s.eyebrow}>Skills</p>
+              <h2 style={s.secTitle}>The strengths I bring to every role.</h2>
+              <p style={s.secText}>Developed through my apprenticeship, volunteering, RAF Cadets and lived experience — these are the skills I offer.</p>
+            </FadeIn>
+            <div style={s.skillsGrid}>
+              {SKILLS.map((sk, i) => (
+                <FadeIn key={sk} delay={i * 0.03}>
+                  <div style={s.skillBox}>{sk}</div>
+                </FadeIn>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ACHIEVEMENTS */}
+        <section id="achievements" style={s.sectionAlt}>
+          <div style={s.container}>
+            <FadeIn>
+              <p style={s.eyebrow}>Achievements & Interests</p>
+              <h2 style={s.secTitle}>Beyond the job description.</h2>
+              <p style={s.secText}>My accomplishments span military leadership, community volunteering, cybersecurity and martial arts — each one shaping who I am professionally and personally.</p>
+            </FadeIn>
+            <div style={s.achGrid}>
+              {ACHIEVEMENTS.map((a, i) => (
+                <FadeIn key={i} delay={i * 0.06}>
+                  <div style={s.achCard}>
+                    <div style={s.achIcon}>{a.icon}</div>
+                    <h3 style={s.achTitle}>{a.title}</h3>
+                    <p style={s.achDesc}>{a.desc}</p>
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* GOALS */}
+        <section id="goals" style={s.sectionGoals}>
+          <div style={s.container}>
+            <FadeIn>
+              <p style={s.eyebrow}>My Goals</p>
+              <h2 style={s.secTitle}>Focused on creating a future I can be proud of.</h2>
+            </FadeIn>
+            <FadeIn delay={0.1}>
+              <div style={s.goalPanel}>
+                <p style={s.goalText}>
+                  My goal is to build a successful and stable career — ideally in cybersecurity, aviation or technology. I'm laying the groundwork now through my Business Admin Apprenticeship, developing the professional skills, qualifications and mindset I need to progress. I want to be someone who is confident, capable and respected — and I'm committed to putting in the work every single day to get there.
+                </p>
+                <div style={s.goalTags}>
+                  {["Cybersecurity", "Aviation", "Technology", "Leadership", "Professionalism", "Continuous Learning"].map(t => (
+                    <span key={t} style={s.goalTag}>{t}</span>
+                  ))}
+                </div>
+              </div>
+            </FadeIn>
+          </div>
+        </section>
+
+        {/* CONTACT */}
+        <section id="contact" style={s.section}>
+          <div style={s.container}>
+            <FadeIn>
+              <div style={s.contactPanel}>
+                <div style={s.contactGrid}>
+                  <div>
+                    <p style={s.eyebrow}>Get In Touch</p>
+                    <h2 style={s.secTitle}>Ready for new opportunities & connections.</h2>
+                    <p style={s.secText}>I'm focused on moving forward with confidence, pride and commitment. Whether it's a new opportunity or just a conversation — I'd love to hear from you.</p>
+                    <div style={s.contactInfo}>
+                      <p style={s.contactLine}>📍 Birmingham, United Kingdom</p>
+                      <p style={s.contactLine}>📞 07391 025873</p>
+                      <p style={s.contactLine}>✉ keecadby2405@gmail.com</p>
+                    </div>
+                  </div>
+                  <div style={s.contactBtns}>
+                    <a href="mailto:keecadby2405@gmail.com" style={s.btnPrimary}>✉ Email Me</a>
+                    <a href="https://www.linkedin.com/in/keelie-cadby-967321337/" target="_blank" rel="noreferrer" style={s.btnSecondary}>in LinkedIn</a>
+                    <a href="tel:07391025873" style={s.btnSecondary}>📞 Call Me</a>
+                  </div>
+                </div>
+              </div>
+            </FadeIn>
+          </div>
+        </section>
+      </main>
+
+      <footer style={s.footer}>
+        <p style={s.footerText}>© 2025 Keelie Cadby · Built with pride</p>
+      </footer>
+    </div>
   );
 }
 
+const pink = "#f472b6";
+const pinkDim = "rgba(244,114,182,";
+
 const styles = {
-  captchaOverlay: {
-    position: "fixed",
-    inset: 0,
-    zIndex: 9999,
-    background: "rgba(9,11,16,0.92)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 24,
-  },
-  captchaBox: {
-    width: "100%",
-    maxWidth: 560,
-    borderRadius: 30,
-    border: "1px solid rgba(255,255,255,0.10)",
-    background: "rgba(255,255,255,0.05)",
-    padding: 40,
-    backdropFilter: "blur(22px)",
-    WebkitBackdropFilter: "blur(22px)",
-    boxShadow: "0 20px 50px rgba(0,0,0,0.20)",
-    textAlign: "center",
-  },
-  page: {
-    minHeight: "100dvh",
-    overflowX: "hidden",
-    background: "#0d1117",
-    color: "white",
-    fontFamily: "Inter, system-ui, sans-serif",
-    position: "relative",
-    WebkitFontSmoothing: "antialiased",
-    MozOsxFontSmoothing: "grayscale",
-  },
-  progress: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    height: 3,
-    width: "100%",
-    background: "#f472b6",
-    zIndex: 70,
-  },
-  backgroundBase: {
-    position: "fixed",
-    inset: 0,
-    zIndex: -20,
-    background: "linear-gradient(to bottom, #090b10, #0d1117, #11151d)",
-  },
-  orbLeft: {
-    position: "fixed",
-    left: -96,
-    top: 0,
-    zIndex: -10,
-    width: 448,
-    height: 448,
-    borderRadius: "50%",
-    background: "rgba(236,72,153,0.15)",
-    filter: "blur(90px)",
-  },
-  orbRight: {
-    position: "fixed",
-    right: -96,
-    top: 288,
-    zIndex: -10,
-    width: 480,
-    height: 480,
-    borderRadius: "50%",
-    background: "rgba(217,70,239,0.10)",
-    filter: "blur(90px)",
-  },
-  backgroundGlow: {
-    position: "fixed",
-    inset: 0,
-    zIndex: -10,
-    background:
-      "radial-gradient(circle at top, rgba(236,72,153,0.14), transparent 28%), radial-gradient(circle at 80% 20%, rgba(217,70,239,0.10), transparent 18%)",
-  },
-  backgroundGrid: {
-    position: "fixed",
-    inset: 0,
-    zIndex: -10,
-    pointerEvents: "none",
-    backgroundImage:
-      "linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)",
-    backgroundSize: "70px 70px",
-    maskImage: "radial-gradient(circle at center, black, transparent 88%)",
-  },
-  header: {
-    position: "sticky",
-    top: 0,
-    zIndex: 50,
-    borderBottom: "1px solid rgba(255,255,255,0.10)",
-    background: "rgba(13,17,23,0.70)",
-    backdropFilter: "blur(20px)",
-    WebkitBackdropFilter: "blur(20px)",
-  },
-  headerInner: {
-    maxWidth: 1280,
-    margin: "0 auto",
-    padding: "16px 20px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 24,
-  },
-  brand: {
-    display: "flex",
-    alignItems: "center",
-    gap: 12,
-  },
-  logoCircle: {
-    width: 44,
-    height: 44,
-    borderRadius: "50%",
-    border: "1px solid rgba(244,114,182,0.30)",
-    background: "rgba(244,114,182,0.10)",
-    color: "#f9a8d4",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    boxShadow: "0 10px 30px rgba(236,72,153,0.12)",
-  },
-  brandTop: {
-    margin: 0,
-    fontSize: 11,
-    letterSpacing: "0.35em",
-    textTransform: "uppercase",
-    color: "#a8a29e",
-  },
-  brandBottom: {
-    margin: "4px 0 0",
-    fontSize: 14,
-    fontWeight: 500,
-    color: "#ffffff",
-  },
-  nav: {
-    display: "flex",
-    gap: 28,
-    alignItems: "center",
-  },
-  navLink: {
-    color: "#d6d3d1",
-    textDecoration: "none",
-    fontSize: 14,
-  },
-  contactButtonTop: {
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 999,
-    background: "#f472b6",
-    color: "#0f172a",
-    textDecoration: "none",
-    padding: "12px 20px",
-    fontSize: 14,
-    fontWeight: 600,
-    boxShadow: "0 10px 30px rgba(236,72,153,0.20)",
-  },
-  heroSection: {
-    position: "relative",
-    minHeight: "100dvh",
-    display: "flex",
-    alignItems: "center",
-    overflow: "hidden",
-    padding: "96px 20px 48px",
-  },
-  heroGrid: {
-    maxWidth: 1280,
-    margin: "0 auto",
-    width: "100%",
-    display: "grid",
-    gridTemplateColumns: "1fr",
-    gap: 24,
-    alignItems: "end",
-  },
-  heroTag: {
-    display: "inline-flex",
-    alignItems: "center",
-    borderRadius: 999,
-    border: "1px solid rgba(244,114,182,0.20)",
-    background: "rgba(244,114,182,0.10)",
-    color: "rgba(251,207,232,0.85)",
-    padding: "10px 16px",
-    fontSize: 12,
-    textTransform: "uppercase",
-    letterSpacing: "0.35em",
-    backdropFilter: "blur(8px)",
-    WebkitBackdropFilter: "blur(8px)",
-  },
-  heroTitle: {
-    margin: "24px 0 0",
-    maxWidth: 820,
-    fontSize: "clamp(2.2rem, 8vw, 5.5rem)",
-    fontWeight: 600,
-    lineHeight: 1.02,
-    letterSpacing: "-0.04em",
-    color: "#f8e7f1",
-  },
-  heroText: {
-    marginTop: 22,
-    maxWidth: 680,
-    fontSize: 16,
-    lineHeight: 1.75,
-    color: "rgba(255,255,255,0.82)",
-  },
-  heroButtons: {
-    marginTop: 28,
-    display: "flex",
-    flexDirection: "column",
-    gap: 16,
-  },
-  primaryButton: {
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 999,
-    background: "#f472b6",
-    color: "#111827",
-    textDecoration: "none",
-    padding: "16px 24px",
-    minHeight: 52,
-    fontSize: 15,
-    fontWeight: 600,
-    boxShadow: "0 12px 30px rgba(236,72,153,0.16)",
-  },
-  secondaryButton: {
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 999,
-    border: "1px solid rgba(255,255,255,0.15)",
-    background: "rgba(255,255,255,0.06)",
-    color: "#ffffff",
-    textDecoration: "none",
-    padding: "16px 24px",
-    minHeight: 52,
-    fontSize: 15,
-    fontWeight: 600,
-    backdropFilter: "blur(10px)",
-    WebkitBackdropFilter: "blur(10px)",
-  },
-  storyGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-    gap: 14,
-  },
-  glassCard: {
-    borderRadius: 24,
-    border: "1px solid rgba(255,255,255,0.12)",
-    background: "rgba(255,255,255,0.06)",
-    padding: 22,
-    backdropFilter: "blur(16px)",
-    WebkitBackdropFilter: "blur(16px)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.18)",
-  },
-  pinkCard: {
-    borderRadius: 24,
-    border: "1px solid rgba(244,114,182,0.24)",
-    background: "rgba(244,114,182,0.12)",
-    padding: 22,
-    backdropFilter: "blur(16px)",
-    WebkitBackdropFilter: "blur(16px)",
-    boxShadow: "0 16px 40px rgba(236,72,153,0.10)",
-  },
-  glassCardLarge: {
-    borderRadius: 26,
-    border: "1px solid rgba(255,255,255,0.12)",
-    background: "rgba(255,255,255,0.06)",
-    padding: 28,
-    backdropFilter: "blur(18px)",
-    WebkitBackdropFilter: "blur(18px)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.18)",
-  },
-  pinkCardLarge: {
-    borderRadius: 26,
-    border: "1px solid rgba(244,114,182,0.22)",
-    background: "rgba(244,114,182,0.12)",
-    padding: 28,
-    backdropFilter: "blur(18px)",
-    WebkitBackdropFilter: "blur(18px)",
-    boxShadow: "0 16px 40px rgba(236,72,153,0.10)",
-  },
-  scrollPill: {
-    position: "absolute",
-    left: "50%",
-    bottom: 32,
-    transform: "translateX(-50%)",
-    display: "inline-flex",
-    alignItems: "center",
-    borderRadius: 999,
-    border: "1px solid rgba(255,255,255,0.10)",
-    background: "rgba(255,255,255,0.05)",
-    color: "#d6d3d1",
-    textDecoration: "none",
-    padding: "10px 16px",
-    fontSize: 12,
-    textTransform: "uppercase",
-    letterSpacing: "0.28em",
-    backdropFilter: "blur(8px)",
-    WebkitBackdropFilter: "blur(8px)",
-  },
-  sectionWrap: {
-    maxWidth: 1200,
-    margin: "0 auto",
-    padding: "72px 20px",
-  },
-  sectionAlt: {
-    borderTop: "1px solid rgba(255,255,255,0.10)",
-    borderBottom: "1px solid rgba(255,255,255,0.10)",
-    background: "rgba(255,255,255,0.03)",
-    padding: "72px 20px",
-  },
-  sectionGoals: {
-    position: "relative",
-    overflow: "hidden",
-    borderTop: "1px solid rgba(255,255,255,0.10)",
-    borderBottom: "1px solid rgba(255,255,255,0.10)",
-    padding: "72px 20px",
-    background:
-      "radial-gradient(circle at top right, rgba(236,72,153,0.12), transparent 32%)",
-  },
-  container: {
-    maxWidth: 1200,
-    margin: "0 auto",
-  },
-  eyebrow: {
-    margin: 0,
-    fontSize: 12,
-    textTransform: "uppercase",
-    letterSpacing: "0.35em",
-    color: "rgba(251,207,232,0.70)",
-  },
-  smallLabel: {
-    margin: 0,
-    fontSize: 12,
-    textTransform: "uppercase",
-    letterSpacing: "0.35em",
-    color: "rgba(251,207,232,0.70)",
-  },
-  sectionTitle: {
-    margin: "14px 0 0",
-    fontSize: "clamp(2rem, 7vw, 2.9rem)",
-    fontWeight: 600,
-    letterSpacing: "-0.03em",
-    lineHeight: 1.08,
-    color: "#f8e7f1",
-  },
-  sectionText: {
-    marginTop: 18,
-    fontSize: 16,
-    lineHeight: 1.8,
-    color: "rgba(255,255,255,0.82)",
-    maxWidth: 760,
-  },
-  largeCopy: {
-    marginTop: 20,
-    fontSize: 18,
-    lineHeight: 1.9,
-    color: "rgba(231,229,228,0.86)",
-  },
-  twoCol: {
-    display: "grid",
-    gridTemplateColumns: "1fr",
-    gap: 24,
-    marginTop: 36,
-  },
-  cardGrid3: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-    gap: 24,
-    marginTop: 36,
-  },
-  darkCard: {
-    height: "100%",
-    borderRadius: 30,
-    border: "1px solid rgba(255,255,255,0.10)",
-    background: "rgba(19,26,35,0.90)",
-    padding: 32,
-    backdropFilter: "blur(18px)",
-    WebkitBackdropFilter: "blur(18px)",
-    boxShadow: "0 20px 50px rgba(0,0,0,0.20)",
-  },
-  cardTitle: {
-    margin: "16px 0 0",
-    fontSize: 28,
-    fontWeight: 600,
-  },
-  cardText: {
-    marginTop: 16,
-    fontSize: 16,
-    lineHeight: 2,
-    color: "rgba(214,211,209,0.80)",
-  },
-  cardLine: {
-    marginTop: 32,
-    height: 1,
-    width: "100%",
-    background:
-      "linear-gradient(to right, rgba(244,114,182,0.50), rgba(251,207,232,0.20), transparent)",
-  },
-  skillsGrid: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: 20,
-    marginTop: 36,
-  },
-  skillBox: {
-    borderRadius: 20,
-    border: "1px solid rgba(244,114,182,0.14)",
-    background: "rgba(244,114,182,0.10)",
-    padding: "18px 14px",
-    textAlign: "center",
-    fontSize: 15,
-    fontWeight: 500,
-    color: "#fce7f3",
-    backdropFilter: "blur(14px)",
-    WebkitBackdropFilter: "blur(14px)",
-    boxShadow: "0 10px 24px rgba(236,72,153,0.05)",
-  },
-  goalPanel: {
-    borderRadius: 34,
-    border: "1px solid rgba(255,255,255,0.10)",
-    background: "rgba(255,255,255,0.05)",
-    padding: 48,
-    backdropFilter: "blur(22px)",
-    WebkitBackdropFilter: "blur(22px)",
-    boxShadow: "0 20px 50px rgba(0,0,0,0.20)",
-  },
-  goalText: {
-    maxWidth: 900,
-    fontSize: 18,
-    lineHeight: 2,
-    color: "rgba(231,229,228,0.86)",
-  },
-  contactPanel: {
-    borderRadius: 28,
-    border: "1px solid rgba(255,255,255,0.12)",
-    background: "rgba(255,255,255,0.06)",
-    padding: 28,
-    backdropFilter: "blur(18px)",
-    WebkitBackdropFilter: "blur(18px)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.18)",
-  },
-  contactGrid: {
-    display: "grid",
-    gridTemplateColumns: "1fr",
-    gap: 24,
-    alignItems: "end",
-  },
-  contactButtons: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 20,
-  },
+  page: { minHeight: "100dvh", background: "#0d1117", color: "#fff", fontFamily: "Inter,system-ui,sans-serif", overflowX: "hidden", WebkitFontSmoothing: "antialiased" },
+  progressBar: { position: "fixed", top: 0, left: 0, height: 3, background: pink, zIndex: 100, transition: "width .1s linear" },
+  bgBase: { position: "fixed", inset: 0, zIndex: -20, background: "linear-gradient(to bottom,#090b10,#0d1117,#11151d)" },
+  orbL: { position: "fixed", left: -80, top: 0, zIndex: -10, width: 400, height: 400, borderRadius: "50%", background: pinkDim+"0.13)", filter: "blur(80px)" },
+  orbR: { position: "fixed", right: -80, top: 320, zIndex: -10, width: 440, height: 440, borderRadius: "50%", background: "rgba(217,70,239,0.09)", filter: "blur(80px)" },
+  bgGlow: { position: "fixed", inset: 0, zIndex: -10, background: `radial-gradient(circle at top,${pinkDim}0.13),transparent 28%),radial-gradient(circle at 80% 20%,rgba(217,70,239,0.09),transparent 18%)` },
+  bgGrid: { position: "fixed", inset: 0, zIndex: -10, pointerEvents: "none", backgroundImage: "linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px)", backgroundSize: "60px 60px", maskImage: "radial-gradient(circle at center,black,transparent 88%)" },
+
+  header: { position: "sticky", top: 0, zIndex: 50, borderBottom: "1px solid rgba(255,255,255,0.09)", background: "rgba(13,17,23,0.75)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" },
+  headerInner: { maxWidth: 1280, margin: "0 auto", padding: "14px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 },
+  brand: { display: "flex", alignItems: "center", gap: 10, flexShrink: 0 },
+  logoCircle: { width: 40, height: 40, borderRadius: "50%", border: `1px solid ${pinkDim}0.35)`, background: pinkDim+"0.12)", color: "#f9a8d4", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700 },
+  brandTop: { margin: 0, fontSize: 14, fontWeight: 600, color: "#fff" },
+  brandSub: { margin: "2px 0 0", fontSize: 11, letterSpacing: "0.3em", textTransform: "uppercase", color: "#9ca3af" },
+  desktopNav: { display: "flex", gap: 4, alignItems: "center", "@media(max-width:768px)": { display: "none" } },
+  navBtn: { background: "none", border: "none", color: "#d1d5db", fontSize: 13, cursor: "pointer", padding: "6px 10px", borderRadius: 8, fontFamily: "inherit" },
+  contactBtnTop: { display: "inline-flex", alignItems: "center", borderRadius: 999, background: pink, color: "#0f172a", textDecoration: "none", padding: "10px 18px", fontSize: 13, fontWeight: 700, flexShrink: 0, whiteSpace: "nowrap" },
+  hamburger: { display: "none", flexDirection: "column", gap: 5, background: "none", border: "none", cursor: "pointer", padding: 6 },
+  bar: { display: "block", width: 22, height: 2, background: "#fff", borderRadius: 2, transition: "all .25s" },
+  mobileMenu: { display: "flex", flexDirection: "column", gap: 0, borderTop: "1px solid rgba(255,255,255,0.08)", padding: "8px 0" },
+  mobileNavBtn: { background: "none", border: "none", color: "#d1d5db", fontSize: 15, cursor: "pointer", padding: "12px 24px", fontFamily: "inherit", textAlign: "left" },
+
+  hero: { position: "relative", minHeight: "100dvh", display: "flex", flexDirection: "column", justifyContent: "center", padding: "80px 20px 60px" },
+  heroInner: { maxWidth: 1280, margin: "0 auto", width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, alignItems: "center" },
+  heroLeft: { display: "flex", flexDirection: "column", gap: 20 },
+  heroTag: { display: "inline-flex", alignSelf: "flex-start", borderRadius: 999, border: `1px solid ${pinkDim}0.22)`, background: pinkDim+"0.10)", color: "rgba(251,207,232,0.9)", padding: "8px 16px", fontSize: 12, textTransform: "uppercase", letterSpacing: "0.3em" },
+  heroTitle: { margin: 0, fontSize: "clamp(2rem,5vw,3.8rem)", fontWeight: 700, lineHeight: 1.05, letterSpacing: "-0.03em", color: "#f8e7f1" },
+  pink: { color: pink },
+  heroText: { margin: 0, fontSize: 16, lineHeight: 1.8, color: "rgba(255,255,255,0.8)", maxWidth: 580 },
+  heroBtns: { display: "flex", flexWrap: "wrap", gap: 12 },
+  btnPrimary: { display: "inline-flex", alignItems: "center", gap: 8, borderRadius: 999, background: pink, color: "#111827", textDecoration: "none", padding: "14px 22px", fontSize: 14, fontWeight: 700, boxShadow: `0 10px 28px ${pinkDim}0.20)` },
+  btnSecondary: { display: "inline-flex", alignItems: "center", gap: 8, borderRadius: 999, border: "1px solid rgba(255,255,255,0.15)", background: "rgba(255,255,255,0.07)", color: "#fff", textDecoration: "none", padding: "14px 22px", fontSize: 14, fontWeight: 600, backdropFilter: "blur(10px)" },
+  heroCards: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 },
+  statCard: { borderRadius: 20, border: "1px solid rgba(255,255,255,0.10)", background: "rgba(255,255,255,0.06)", padding: "20px", backdropFilter: "blur(16px)" },
+  statCardPink: { border: `1px solid ${pinkDim}0.22)`, background: pinkDim+"0.11)" },
+  statLabel: { margin: 0, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.3em", color: "rgba(251,207,232,0.7)" },
+  statVal: { margin: "8px 0 0", fontSize: 17, fontWeight: 700, color: "#f8e7f1", lineHeight: 1.3 },
+  scrollPill: { alignSelf: "center", marginTop: 48, display: "inline-flex", alignItems: "center", gap: 8, borderRadius: 999, border: "1px solid rgba(255,255,255,0.10)", background: "rgba(255,255,255,0.05)", color: "#9ca3af", textDecoration: "none", padding: "9px 16px", fontSize: 12, textTransform: "uppercase", letterSpacing: "0.25em" },
+
+  section: { padding: "72px 20px", borderTop: "1px solid rgba(255,255,255,0.07)" },
+  sectionAlt: { padding: "72px 20px", borderTop: "1px solid rgba(255,255,255,0.07)", background: "rgba(255,255,255,0.025)" },
+  sectionGoals: { padding: "72px 20px", borderTop: "1px solid rgba(255,255,255,0.07)", background: `radial-gradient(circle at top right,${pinkDim}0.10),transparent 32%)` },
+  container: { maxWidth: 1200, margin: "0 auto" },
+  eyebrow: { margin: 0, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.38em", color: "rgba(251,207,232,0.7)" },
+  secTitle: { margin: "14px 0 0", fontSize: "clamp(1.8rem,5vw,2.8rem)", fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.1, color: "#f8e7f1" },
+  secText: { marginTop: 16, fontSize: 16, lineHeight: 1.8, color: "rgba(255,255,255,0.78)", maxWidth: 760 },
+  lgCopy: { marginTop: 16, fontSize: 17, lineHeight: 1.9, color: "rgba(231,229,228,0.86)" },
+
+  twoCol: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginTop: 36 },
+  cardGlassLg: { borderRadius: 24, border: "1px solid rgba(255,255,255,0.10)", background: "rgba(255,255,255,0.06)", padding: 28, backdropFilter: "blur(16px)", height: "100%" },
+  cardPinkLg: { borderRadius: 24, border: `1px solid ${pinkDim}0.22)`, background: pinkDim+"0.11)", padding: 28, backdropFilter: "blur(16px)", height: "100%" },
+
+  eduGrid: { display: "flex", flexDirection: "column", gap: 14, marginTop: 20 },
+  eduCard: { display: "flex", gap: 20, alignItems: "flex-start", borderRadius: 18, border: "1px solid rgba(255,255,255,0.09)", background: "rgba(255,255,255,0.04)", padding: "18px 22px" },
+  eduYear: { fontSize: 13, fontWeight: 700, color: pink, minWidth: 38, paddingTop: 2 },
+  eduQual: { margin: 0, fontSize: 14, fontWeight: 600, color: "#f8e7f1", lineHeight: 1.5 },
+  eduPlace: { margin: "4px 0 0", fontSize: 13, color: "rgba(255,255,255,0.55)" },
+
+  expList: { display: "flex", flexDirection: "column", gap: 24, marginTop: 36 },
+  expCard: { borderRadius: 24, border: "1px solid rgba(255,255,255,0.10)", background: "rgba(19,26,35,0.90)", padding: "28px 28px 24px", backdropFilter: "blur(16px)" },
+  expHeader: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, flexWrap: "wrap" },
+  expRole: { margin: 0, fontSize: 22, fontWeight: 700, color: "#f8e7f1" },
+  expCompany: { margin: "4px 0 0", fontSize: 15, color: pink, fontWeight: 600 },
+  expMeta: { display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 },
+  expPeriod: { fontSize: 13, color: "rgba(255,255,255,0.55)", whiteSpace: "nowrap" },
+  expType: { fontSize: 11, textTransform: "uppercase", letterSpacing: "0.25em", color: "rgba(251,207,232,0.6)" },
+  expBullets: { margin: "20px 0 0", padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 10 },
+  expBullet: { display: "flex", gap: 12, alignItems: "flex-start", fontSize: 15, lineHeight: 1.7, color: "rgba(214,211,209,0.82)" },
+  bulletDot: { display: "block", width: 6, height: 6, borderRadius: "50%", background: pink, flexShrink: 0, marginTop: 8 },
+  cardLine: { marginTop: 24, height: 1, background: `linear-gradient(to right,${pinkDim}0.45),${pinkDim}0.15),transparent)` },
+
+  skillsGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(160px,1fr))", gap: 14, marginTop: 36 },
+  skillBox: { borderRadius: 16, border: `1px solid ${pinkDim}0.15)`, background: pinkDim+"0.09)", padding: "14px 12px", textAlign: "center", fontSize: 14, fontWeight: 500, color: "#fce7f3", backdropFilter: "blur(12px)" },
+
+  achGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 20, marginTop: 36 },
+  achCard: { borderRadius: 22, border: "1px solid rgba(255,255,255,0.09)", background: "rgba(255,255,255,0.05)", padding: 24, backdropFilter: "blur(14px)" },
+  achIcon: { fontSize: 28, marginBottom: 12 },
+  achTitle: { margin: 0, fontSize: 16, fontWeight: 700, color: "#f8e7f1", lineHeight: 1.3 },
+  achDesc: { margin: "10px 0 0", fontSize: 14, lineHeight: 1.8, color: "rgba(214,211,209,0.78)" },
+
+  goalPanel: { marginTop: 36, borderRadius: 28, border: "1px solid rgba(255,255,255,0.10)", background: "rgba(255,255,255,0.05)", padding: "40px", backdropFilter: "blur(20px)" },
+  goalText: { margin: 0, fontSize: 18, lineHeight: 2, color: "rgba(231,229,228,0.88)", maxWidth: 900 },
+  goalTags: { display: "flex", flexWrap: "wrap", gap: 10, marginTop: 28 },
+  goalTag: { borderRadius: 999, border: `1px solid ${pinkDim}0.24)`, background: pinkDim+"0.12)", color: "#fce7f3", padding: "8px 16px", fontSize: 13, fontWeight: 500 },
+
+  contactPanel: { borderRadius: 26, border: "1px solid rgba(255,255,255,0.10)", background: "rgba(255,255,255,0.05)", padding: "40px", backdropFilter: "blur(18px)" },
+  contactGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, alignItems: "start" },
+  contactInfo: { marginTop: 24, display: "flex", flexDirection: "column", gap: 10 },
+  contactLine: { margin: 0, fontSize: 15, color: "rgba(255,255,255,0.72)" },
+  contactBtns: { display: "flex", flexDirection: "column", gap: 14, paddingTop: 8 },
+
+  footer: { borderTop: "1px solid rgba(255,255,255,0.07)", padding: "24px 20px", textAlign: "center" },
+  footerText: { margin: 0, fontSize: 13, color: "rgba(255,255,255,0.35)" },
 };
+
+// Inject responsive CSS
+const css = `
+  @media (max-width: 900px) {
+    .hero-inner { grid-template-columns: 1fr !important; }
+    .hero-cards { grid-template-columns: 1fr 1fr !important; }
+    .two-col { grid-template-columns: 1fr !important; }
+    .contact-grid { grid-template-columns: 1fr !important; }
+  }
+  @media (max-width: 640px) {
+    .desktop-nav { display: none !important; }
+    .hamburger { display: flex !important; }
+    .contact-btn-top { display: none !important; }
+    .hero-cards { grid-template-columns: 1fr 1fr !important; }
+    .exp-header { flex-direction: column !important; }
+    .exp-meta { align-items: flex-start !important; }
+    .hero-btns { flex-direction: column !important; }
+    .hero-btns a { justify-content: center; }
+  }
+`;
+
+// Apply via style tag
+if (typeof document !== "undefined") {
+  const existing = document.getElementById("kc-styles");
+  if (!existing) {
+    const tag = document.createElement("style");
+    tag.id = "kc-styles";
+    tag.textContent = css;
+    document.head.appendChild(tag);
+  }
+}
