@@ -2,6 +2,188 @@ import { useState, useEffect, useRef } from "react";
 
 const NAV = ["Home","About","Experience","Skills","Achievements","Goals","Contact"];
 
+// ── Easter Egg: Space Shooter ──────────────────────────────
+function SpaceGame({ onClose }) {
+  const canvas = useRef(null);
+  const state = useRef({ player: { x: 180, y: 340 }, bullets: [], enemies: [], particles: [], score: 0, lives: 3, frame: 0, over: false, keys: {} });
+  const anim = useRef(null);
+  const scoreDisp = useRef(null);
+  const livesDisp = useRef(null);
+
+  useEffect(() => {
+    const c = canvas.current;
+    const ctx = c.getContext("2d");
+    const W = 360, H = 480;
+    const st = state.current;
+
+    const onKey = (e) => {
+      st.keys[e.code] = e.type === "keydown";
+      if (e.code === "Space" && e.type === "keydown") shoot();
+      e.preventDefault();
+    };
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("keyup", onKey);
+
+    const shoot = () => {
+      if (st.over) return;
+      st.bullets.push({ x: st.player.x, y: st.player.y - 10 });
+    };
+
+    const spawnEnemy = () => {
+      st.enemies.push({ x: 20 + Math.random() * (W - 40), y: -20, spd: 1.2 + Math.random() * 1.2 });
+    };
+
+    const explode = (x, y) => {
+      for (let i = 0; i < 8; i++) {
+        const a = (Math.PI * 2 * i) / 8;
+        st.particles.push({ x, y, vx: Math.cos(a) * 2, vy: Math.sin(a) * 2, life: 1 });
+      }
+    };
+
+    const loop = () => {
+      ctx.clearRect(0, 0, W, H);
+      // bg
+      ctx.fillStyle = "#0d1117";
+      ctx.fillRect(0, 0, W, H);
+
+      if (st.over) {
+        ctx.fillStyle = "#f472b6";
+        ctx.font = "bold 28px Inter,sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("GAME OVER", W / 2, H / 2 - 20);
+        ctx.fillStyle = "rgba(255,255,255,0.7)";
+        ctx.font = "16px Inter,sans-serif";
+        ctx.fillText(`Score: ${st.score}`, W / 2, H / 2 + 14);
+        ctx.fillText("Tap to restart", W / 2, H / 2 + 40);
+        anim.current = requestAnimationFrame(loop);
+        return;
+      }
+
+      st.frame++;
+      if (st.frame % 60 === 0) spawnEnemy();
+
+      // move player
+      if (st.keys["ArrowLeft"] || st.keys["KeyA"]) st.player.x = Math.max(18, st.player.x - 4);
+      if (st.keys["ArrowRight"] || st.keys["KeyD"]) st.player.x = Math.min(W - 18, st.player.x + 4);
+
+      // auto shoot
+      if (st.frame % 18 === 0) shoot();
+
+      // bullets
+      st.bullets = st.bullets.filter(b => b.y > -10);
+      st.bullets.forEach(b => { b.y -= 7; });
+
+      // enemies
+      st.enemies.forEach(e => { e.y += e.spd; });
+
+      // collisions
+      st.bullets.forEach((b, bi) => {
+        st.enemies.forEach((e, ei) => {
+          if (Math.abs(b.x - e.x) < 18 && Math.abs(b.y - e.y) < 18) {
+            explode(e.x, e.y);
+            st.bullets.splice(bi, 1);
+            st.enemies.splice(ei, 1);
+            st.score++;
+            if (scoreDisp.current) scoreDisp.current.textContent = st.score;
+          }
+        });
+      });
+
+      // enemy past bottom
+      st.enemies = st.enemies.filter(e => {
+        if (e.y > H + 10) {
+          st.lives--;
+          if (livesDisp.current) livesDisp.current.textContent = "❤️".repeat(Math.max(0, st.lives));
+          if (st.lives <= 0) st.over = true;
+          return false;
+        }
+        return true;
+      });
+
+      // particles
+      st.particles.forEach(p => { p.x += p.vx; p.y += p.vy; p.life -= 0.06; });
+      st.particles = st.particles.filter(p => p.life > 0);
+
+      // draw particles
+      st.particles.forEach(p => {
+        ctx.globalAlpha = p.life;
+        ctx.fillStyle = "#f472b6";
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      });
+
+      // draw bullets
+      ctx.fillStyle = "#f9a8d4";
+      st.bullets.forEach(b => {
+        ctx.fillRect(b.x - 2, b.y, 4, 10);
+      });
+
+      // draw enemies (little UFOs)
+      st.enemies.forEach(e => {
+        ctx.fillStyle = "#a78bfa";
+        ctx.beginPath();
+        ctx.ellipse(e.x, e.y, 14, 7, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#c4b5fd";
+        ctx.beginPath();
+        ctx.ellipse(e.x, e.y - 5, 7, 5, 0, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // draw player (little jet)
+      ctx.fillStyle = "#f472b6";
+      ctx.beginPath();
+      ctx.moveTo(st.player.x, st.player.y - 16);
+      ctx.lineTo(st.player.x - 12, st.player.y + 10);
+      ctx.lineTo(st.player.x, st.player.y + 4);
+      ctx.lineTo(st.player.x + 12, st.player.y + 10);
+      ctx.closePath();
+      ctx.fill();
+
+      anim.current = requestAnimationFrame(loop);
+    };
+
+    anim.current = requestAnimationFrame(loop);
+
+    return () => {
+      cancelAnimationFrame(anim.current);
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("keyup", onKey);
+    };
+  }, []);
+
+  const restart = () => {
+    const st = state.current;
+    st.player = { x: 180, y: 340 };
+    st.bullets = []; st.enemies = []; st.particles = [];
+    st.score = 0; st.lives = 3; st.frame = 0; st.over = false;
+    if (scoreDisp.current) scoreDisp.current.textContent = 0;
+    if (livesDisp.current) livesDisp.current.textContent = "❤️❤️❤️";
+  };
+
+  return (
+    <div style={{ position: "fixed", inset: 0, zIndex: 200, background: "rgba(9,11,16,0.92)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ borderRadius: 24, border: "1px solid rgba(244,114,182,0.25)", background: "#0d1117", overflow: "hidden", boxShadow: "0 24px 60px rgba(0,0,0,0.5)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+          <span style={{ fontSize: 13, color: "#f9a8d4", fontWeight: 700, letterSpacing: "0.2em" }}>🚀 KEE'S SPACE SHOOTER</span>
+          <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+            <span style={{ fontSize: 13, color: "#fff" }}>Score: <b ref={scoreDisp}>0</b></span>
+            <span ref={livesDisp} style={{ fontSize: 13 }}>❤️❤️❤️</span>
+            <button onClick={onClose} style={{ background: "none", border: "none", color: "#9ca3af", fontSize: 18, cursor: "pointer" }}>✕</button>
+          </div>
+        </div>
+        <canvas ref={canvas} width={360} height={480} onClick={restart} style={{ display: "block", touchAction: "none" }} />
+        <div style={{ padding: "10px 16px", borderTop: "1px solid rgba(255,255,255,0.07)", display: "flex", justifyContent: "space-between" }}>
+          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.35)" }}>← → to move · auto-fires · tap canvas to restart</span>
+          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.25)" }}>secret: type KEE</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const EXPERIENCE = [
   {
     role: "Apprentice Business Administrator",
@@ -95,6 +277,17 @@ export default function Portfolio() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [activeSection, setActiveSection] = useState("home");
+  const [showGame, setShowGame] = useState(false);
+  const keySeq = useRef("");
+
+  useEffect(() => {
+    const onKey = (e) => {
+      keySeq.current = (keySeq.current + e.key.toUpperCase()).slice(-3);
+      if (keySeq.current === "KEE") setShowGame(true);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY);
@@ -113,6 +306,7 @@ export default function Portfolio() {
 
   return (
     <div style={s.page}>
+      {showGame && <SpaceGame onClose={() => setShowGame(false)} />}
       {/* Progress bar */}
       <div style={{ ...s.progressBar, width: `${progress * 100}%` }} />
 
