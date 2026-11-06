@@ -11,7 +11,7 @@ const NAV = [
 ];
 
 // Add your photo as public/keelie.jpg and your CV as public/Keelie-Cadby-CV.pdf
-const PHOTO_SRC = "/keelie.jpg";
+const PHOTO_SRC = "/keelie.jpg?v=2";
 const CV_SRC = "/Keelie-Cadby-CV.pdf";
 
 const EXPERIENCE = [
