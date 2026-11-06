@@ -1,6 +1,18 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
-const NAV = ["Home","About","Experience","Timeline","Skills","Achievements","Challenge","Passion","Goals","Contact"];
+const NAV = [
+  { label:"About", id:"about" },
+  { label:"Experience", id:"experience" },
+  { label:"Journey", id:"timeline" },
+  { label:"Skills", id:"skills" },
+  { label:"Achievements", id:"achievements" },
+  { label:"Purpose", id:"passion" },
+  { label:"Contact", id:"contact" },
+];
+
+// Add your photo as public/keelie.jpg and your CV as public/Keelie-Cadby-CV.pdf
+const PHOTO_SRC = "/keelie.jpg";
+const CV_SRC = "/Keelie-Cadby-CV.pdf";
 
 const EXPERIENCE = [
   { role:"Apprentice Business Administrator", company:"Auxilio Care Ltd", period:"Aug 2025 – Present", type:"Full-time Apprenticeship · 30 hrs/week", bullets:["Day-to-day administrative support across Auxilio Care and Aurum Housing","Maintaining accurate records, filing systems and databases","Managing correspondence — emails, letters and phone calls","Diary and calendar management for managers and teams","HR admin: personnel files, training records and compliance documentation","Supporting compliance audits and regulatory requirements","Preparation and documentation for interviews"] },
@@ -8,14 +20,19 @@ const EXPERIENCE = [
   { role:"Charity Shop Volunteer", company:"YMCA", period:"May 2023 – Jun 2023", type:"Volunteer", bullets:["Designed attractive window and shop floor displays","Provided advice and guidance to customers","Processed, labelled and displayed donations to maximise sales","Assessed donated goods to ensure quality and presentation"] },
 ];
 
-const SKILLS = ["Administration Support","Microsoft 365","Data Entry","Document Management","Office Administration","Diary Management","Attention to Detail","Confidentiality","Written Communication","Verbal Communication","Multitasking","Organisation","Presentation Skills","Decision Making","Calm Under Pressure","Active Listening","Leadership","Team Building","Social Media","Willingness to Learn"];
+const TOP_SKILLS = ["Microsoft 365","Diary Management","HR & Compliance Admin","Confidentiality & GDPR","Attention to Detail","Leadership"];
+
+const SKILL_GROUPS = [
+  { title:"Administration", items:["Administration Support","Data Entry","Document Management","Office Administration","Multitasking","Organisation"] },
+  { title:"Communication", items:["Written Communication","Verbal Communication","Presentation Skills","Active Listening","Social Media"] },
+  { title:"Leadership & Mindset", items:["Team Building","Decision Making","Calm Under Pressure","Willingness to Learn"] },
+];
 
 const ACHIEVEMENTS = [
-  { icon:"✈️", title:"RAFAC International Exchange 2026", desc:"Competitively selected for a prestigious international exchange programme to the USA — involving aviation exposure and leadership engagement with allied air cadet organisations." },
+  { icon:"✈️", title:"RAFAC International Exchange 2026", desc:"Competitively selected for, and completed, a prestigious international exchange programme to the USA — gaining aviation exposure and leadership experience alongside allied air cadet organisations." },
   { icon:"🎖️", title:"Flight Sergeant – RAF Air Cadets", desc:"Progressed to Flight Sergeant since joining in 2021. Qualified to teach new cadets in classifications and various areas of learning as part of the training team." },
   { icon:"🛡️", title:"Leadership Courses", desc:"Completed Bronze and Silver Leadership Courses, Method of Instruction, Cadet Drill Course, and Master Air Cadet Classification." },
   { icon:"🔐", title:"Cyber Security", desc:"Introduction to Cyber Security (OpenLearn), Bronze and Silver Cyber Courses. Passionate about pursuing a career in cybersecurity or aviation technology." },
-  { icon:"🤝", title:"Our Voice Our Service (OVOS)", desc:"Active member since ~2017 — chaired interview panels for social workers, spoken to council members to identify community and care change needs, and helped ensure care-experienced young people's voices shape the services that support them." },
   { icon:"🏥", title:"Care Certificate & VTQs", desc:"Care Certificate (Sep 2025), Customer Service L2, Complaint Handling L1, Presentation Skills L1, GDPR Certified, Equality Act 2010 Certified." },
   { icon:"🚶", title:"Road Marching", desc:"Completed 15km, 20km and 25km road marches, Basic First Aid, and Radio Basic Operator qualification." },
 ];
@@ -35,7 +52,7 @@ const TIMELINE = [
   { year:"2025", icon:"🎖️", title:"Promoted to Flight Sergeant", desc:"Achieved the rank of Flight Sergeant in RAF Air Cadets, qualifying to teach and lead new cadets on the training team." },
   { year:"2025", icon:"📋", title:"Apprentice Business Administrator", desc:"Started full apprenticeship at Auxilio Care Ltd — handling HR admin, compliance, diary management and correspondence." },
   { year:"2025", icon:"🏥", title:"Care Certificate Achieved", desc:"Completed Care Certificate alongside VTQs in Customer Service, Complaint Handling, GDPR and Equality Act 2010." },
-  { year:"2026", icon:"🌍", title:"RAFAC International Exchange – USA", desc:"Competitively selected for a prestigious international exchange programme to the United States involving aviation and leadership." },
+  { year:"2026", icon:"🌍", title:"RAFAC International Exchange – USA", desc:"Completed a competitively selected international exchange programme to the United States, focused on aviation and leadership." },
 ];
 
 const TYPING_PROMPTS = [
@@ -71,7 +88,7 @@ function FadeIn({ children, delay = 0 }) {
 
 function LoadingScreen({ onDone }) {
   const [fade, setFade] = useState(false);
-  useEffect(() => { const t1 = setTimeout(() => setFade(true), 1800); const t2 = setTimeout(() => onDone(), 2400); return () => { clearTimeout(t1); clearTimeout(t2); }; }, []);
+  useEffect(() => { const t1 = setTimeout(() => setFade(true), 500); const t2 = setTimeout(() => onDone(), 800); return () => { clearTimeout(t1); clearTimeout(t2); }; }, []);
   return (
     <div style={{ position:"fixed", inset:0, zIndex:300, background:"#0d1117", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:24, opacity:fade?0:1, transition:"opacity .6s ease", pointerEvents:fade?"none":"all" }}>
       <div style={{ fontSize:64, animation:"spinKey 1.2s linear infinite" }}>🔑</div>
@@ -167,14 +184,19 @@ function OpportunityBadge() {
 function Timeline({ t }) {
   return (
     <div style={{position:"relative",marginTop:48}}>
-      <div style={{position:"absolute",left:"50%",top:0,bottom:0,width:2,background:"linear-gradient(to bottom,transparent,rgba(244,114,182,0.4),transparent)",transform:"translateX(-50%)"}} />
-      {TIMELINE.map((item,i)=>{
+      <div className="tl-line" style={{position:"absolute",left:"50%",top:0,bottom:0,width:2,background:"linear-gradient(to bottom,transparent,rgba(244,114,182,0.4),transparent)",transform:"translateX(-50%)"}} />
+      {TIMELINE.map((item,i)=>(<TimelineItem key={i} item={item} i={i} t={t}/>))}
+    </div>
+  );
+}
+
+function TimelineItem({ item, i, t }) {
         const [ref,inView]=useInView(0.1);
         const left=i%2===0;
         return (
-          <div key={i} ref={ref} style={{display:"flex",justifyContent:left?"flex-start":"flex-end",marginBottom:32,opacity:inView?1:0,transform:inView?"translateY(0)":`translateY(20px)`,transition:`opacity .6s ease ${i*.07}s,transform .6s ease ${i*.07}s`}}>
-            <div style={{width:"44%",padding:left?"0 32px 0 0":"0 0 0 32px",textAlign:left?"right":"left",position:"relative"}}>
-              <div style={{position:"absolute",top:16,[left?"right":"left"]:-9,width:18,height:18,borderRadius:"50%",background:"#f472b6",border:"3px solid #0d1117",zIndex:2,boxShadow:"0 0 12px rgba(244,114,182,0.5)"}} />
+          <div ref={ref} className="tl-row" style={{display:"flex",justifyContent:left?"flex-start":"flex-end",marginBottom:32,opacity:inView?1:0,transform:inView?"translateY(0)":`translateY(20px)`,transition:`opacity .6s ease ${i*.07}s,transform .6s ease ${i*.07}s`}}>
+            <div className="tl-item" style={{width:"44%",padding:left?"0 32px 0 0":"0 0 0 32px",textAlign:left?"right":"left",position:"relative"}}>
+              <div className="tl-dot" style={{position:"absolute",top:16,[left?"right":"left"]:-9,width:18,height:18,borderRadius:"50%",background:"#f472b6",border:"3px solid #0d1117",zIndex:2,boxShadow:"0 0 12px rgba(244,114,182,0.5)"}} />
               <div style={{borderRadius:20,border:"1px solid",borderColor:t.border,background:t.card,padding:"18px 22px",backdropFilter:"blur(14px)"}}>
                 <div style={{fontSize:22,marginBottom:6}}>{item.icon}</div>
                 <span style={{fontSize:11,fontWeight:700,color:"#f472b6",letterSpacing:"0.25em"}}>{item.year}</span>
@@ -184,9 +206,6 @@ function Timeline({ t }) {
             </div>
           </div>
         );
-      })}
-    </div>
-  );
 }
 
 // ── Typing Challenge & Leaderboard ─────────────────────────
@@ -463,32 +482,33 @@ export default function Portfolio() {
               <p style={{...s.brandSub,color:t.muted}}>Portfolio</p>
             </div>
           </div>
-          <nav style={s.desktopNav}>{NAV.map(n=><button key={n} onClick={()=>scrollTo(n.toLowerCase())} style={{...s.navBtn,color:t.navText}}>{n}</button>)}</nav>
-          <button onClick={()=>setDark(d=>!d)} style={{...s.iconBtn,color:t.navText}}>{dark?"☀️":"🌙"}</button>
-          <button onClick={()=>scrollTo("contact")} style={s.contactBtnTop}>Contact Me</button>
-          <button onClick={()=>setMenuOpen(o=>!o)} style={s.hamburger} aria-label="Menu">
+          <nav data-desktop-nav style={s.desktopNav}>{NAV.map(n=><button key={n.id} onClick={()=>scrollTo(n.id)} style={{...s.navBtn,color:t.navText}}>{n.label}</button>)}</nav>
+          <button onClick={()=>setDark(d=>!d)} style={{...s.iconBtn,color:t.navText}} aria-label="Toggle light/dark mode">{dark?"☀️":"🌙"}</button>
+          <button data-contact-top onClick={()=>scrollTo("contact")} style={s.contactBtnTop}>Contact Me</button>
+          <button data-hamburger onClick={()=>setMenuOpen(o=>!o)} style={{...s.hamburger}} aria-label="Menu">
             <span style={{...s.bar,transform:menuOpen?"rotate(45deg) translateY(7px)":"none"}}/><span style={{...s.bar,opacity:menuOpen?0:1}}/><span style={{...s.bar,transform:menuOpen?"rotate(-45deg) translateY(-7px)":"none"}}/>
           </button>
         </div>
-        {menuOpen&&<div style={{...s.mobileMenu,background:t.headerBg,borderColor:t.border}}>{NAV.map(n=><button key={n} onClick={()=>scrollTo(n.toLowerCase())} style={{...s.mobileNavBtn,color:t.navText}}>{n}</button>)}</div>}
+        {menuOpen&&<div style={{...s.mobileMenu,background:t.headerBg,borderColor:t.border}}>{NAV.map(n=><button key={n.id} onClick={()=>scrollTo(n.id)} style={{...s.mobileNavBtn,color:t.navText}}>{n.label}</button>)}</div>}
       </header>
 
       <main>
         {/* HERO */}
         <section id="home" style={s.hero}>
-          <div style={s.heroInner}>
+          <div className="hero-inner" style={s.heroInner}>
             <div style={s.heroLeft}>
+              <img src={PHOTO_SRC} alt="Keelie Cadby" style={s.heroPhoto} onError={e=>{e.currentTarget.style.display="none";}}/>
               <OpportunityBadge/>
               <div style={s.heroTag}>Business Admin Apprentice · Birmingham, UK</div>
               <h1 style={{...s.heroTitle,color:t.heading}}>Hi, I'm Keelie — <TypingText/></h1>
               <p style={{...s.heroText,color:t.body}}>From RAF Air Cadets to a Business Admin Apprenticeship — driven, organised and building a professional future every single day.</p>
-              <div style={s.heroBtns}>
+              <div className="hero-btns" style={s.heroBtns}>
                 <a href="mailto:keecadby2405@gmail.com" style={{...btnPrimary,textDecoration:"none"}}>✉ Email Me</a>
+                <a href={CV_SRC} download style={{...btnSecondary,borderColor:t.border,color:t.text,textDecoration:"none"}}>⬇ Download CV</a>
                 <a href="https://www.linkedin.com/in/keelie-cadby-967321337/" target="_blank" rel="noreferrer" style={{...btnSecondary,borderColor:t.border,color:t.text,textDecoration:"none"}}>in LinkedIn</a>
               </div>
-              <VisitorCounter/>
             </div>
-            <div style={s.heroCards}>
+            <div className="hero-cards" style={s.heroCards}>
               {[{label:"Current Role",val:"Apprentice Business Admin"},{label:"Organisation",val:"Auxilio Care Ltd"},{label:"RAF Cadets Rank",val:"Flight Sergeant"},{label:"Since",val:"2021"}].map((c,i)=>(
                 <div key={i} style={i%2===1?s.statCardPink:{...s.statCard,background:t.card,borderColor:t.border}}>
                   <p style={s.statLabel}>{c.label}</p><p style={{...s.statVal,color:t.heading}}>{c.val}</p>
@@ -502,8 +522,8 @@ export default function Portfolio() {
         {/* ABOUT */}
         <section id="about" style={{...s.section,borderColor:t.border}}>
           <div style={s.container}>
-            <FadeIn><p style={s.eyebrow}>About Me</p><h2 style={{...s.secTitle,color:t.heading}}>My journey has shaped the person I'm becoming.</h2><p style={{...s.secText,color:t.body}}>I'm a highly organised and efficient Business Support student with strong administrative experience. I've learned to show up with discipline, pride, and ambition every single day — from progressing through the RAF Air Cadets to earning a competitive place on an international exchange to the USA.</p></FadeIn>
-            <div style={s.twoCol}>
+            <FadeIn><p style={s.eyebrow}>About Me</p><h2 style={{...s.secTitle,color:t.heading}}>My journey has shaped the person I'm becoming.</h2><p style={{...s.secText,color:t.body}}>I'm a highly organised Business Administration Apprentice at Auxilio Care, with hands-on experience in HR admin, compliance and diary management. I've learned to show up with discipline, pride, and ambition every single day — from progressing through the RAF Air Cadets to earning a competitive place on, and completing, an international exchange to the USA.</p></FadeIn>
+            <div className="two-col" style={s.twoCol}>
               {[{t:"Where I Come From",p:"My background has built resilience, patience and self-respect. Everything I've faced has made me more determined and more capable. I've learned that growth takes effort — and I put that effort in every day."},{t:"Where I'm Going",p:"I'm passionate about cybersecurity, aviation and technology. I'm building the professional foundation now through my apprenticeship so I can move confidently towards a career I'm truly excited about.",pink:true}].map((c,i)=>(
                 <FadeIn key={i} delay={i*.1}><div style={c.pink?s.cardPinkLg:{...s.cardGlassLg,background:t.card,borderColor:t.border}}><p style={{...s.eyebrow,color:c.pink?"rgba(255,232,242,.85)":undefined}}>{c.t}</p><p style={{...s.lgCopy,color:c.pink?"rgba(255,255,255,.92)":t.body}}>{c.p}</p></div></FadeIn>
               ))}
@@ -538,7 +558,16 @@ export default function Portfolio() {
         <section id="skills" style={{...s.sectionAlt,borderColor:t.border,background:t.altBg}}>
           <div style={s.container}>
             <FadeIn><p style={s.eyebrow}>Skills</p><h2 style={{...s.secTitle,color:t.heading}}>The strengths I bring to every role.</h2><p style={{...s.secText,color:t.body}}>Developed through my apprenticeship, volunteering, RAF Cadets and lived experience.</p></FadeIn>
-            <div style={s.skillsGrid}>{SKILLS.map((sk,i)=><FadeIn key={sk} delay={i*.03}><div style={s.skillBox}>{sk}</div></FadeIn>)}</div>
+            <FadeIn delay={0.05}>
+              <p style={{...s.eyebrow,marginTop:36}}>Top Skills</p>
+              <div style={s.topSkillsGrid}>{TOP_SKILLS.map(sk=><div key={sk} style={s.topSkill}>{sk}</div>)}</div>
+            </FadeIn>
+            <div style={s.skillGroups}>{SKILL_GROUPS.map((g,i)=>(
+              <FadeIn key={g.title} delay={i*.08}><div style={{...s.achCard,background:t.card,borderColor:t.border,height:"100%"}}>
+                <h3 style={{...s.achTitle,color:t.heading}}>{g.title}</h3>
+                <div style={{display:"flex",flexWrap:"wrap",gap:8,marginTop:14}}>{g.items.map(sk=><span key={sk} style={s.goalTag}>{sk}</span>)}</div>
+              </div></FadeIn>
+            ))}</div>
           </div>
         </section>
 
@@ -568,7 +597,7 @@ export default function Portfolio() {
             </FadeIn>
             <FadeIn delay={0.1}>
               <div style={{...s.goalPanel,background:t.card,borderColor:t.border,marginTop:36}}>
-                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:40,alignItems:"start"}}>
+                <div className="two-col" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:40,alignItems:"start"}}>
                   <div>
                     <p style={{margin:"0 0 20px",fontSize:18,lineHeight:2,color:t.body}}>
                       I grew up in care, and I know first-hand what it feels like to wonder if anyone believes in you. That experience didn't hold me back — it became my greatest motivation.
@@ -582,7 +611,7 @@ export default function Portfolio() {
                   </div>
                   <div style={{display:"flex",flexDirection:"column",gap:16}}>
                     {[
-                      { icon:"💜", title:"Our Voice Our Service (OVOS)", desc:"Since ~2017, I've been an active member of OVOS — charing interview panels for social workers, speaking directly to council members to identify change needs in the community, and helping shape care services so young people feel genuinely seen and heard." },
+                      { icon:"💜", title:"Our Voice Our Service (OVOS)", desc:"Since ~2017, I've been an active member of OVOS — chairing interview panels for social workers, speaking directly to council members to identify change needs in the community, and helping shape care services so young people feel genuinely seen and heard." },
                       { icon:"🎖️", title:"RAF Cadet Instructor", desc:"As a Flight Sergeant, I teach and mentor young cadets every week — giving them the same belief in themselves that I had to find on my own." },
                       { icon:"🌟", title:"Leading by Example", desc:"I want young people to look at my journey — from care to apprentice, Flight Sergeant, and international exchange — and know that their start does not define their future." },
                     ].map((card,i)=>(
@@ -617,7 +646,7 @@ export default function Portfolio() {
         <section id="contact" style={{...s.section,borderColor:t.border}}>
           <div style={s.container}>
             <FadeIn><div style={{...s.contactPanel,background:t.card,borderColor:t.border}}>
-              <div style={s.contactGrid}>
+              <div className="contact-grid" style={s.contactGrid}>
                 <div>
                   <p style={s.eyebrow}>Get In Touch</p>
                   <h2 style={{...s.secTitle,color:t.heading}}>Ready for new opportunities & connections.</h2>
@@ -631,6 +660,7 @@ export default function Portfolio() {
                 <div style={s.contactBtns}>
                   <a href="mailto:keecadby2405@gmail.com" style={{...btnPrimary,textDecoration:"none"}}>✉ Email Me</a>
                   <a href="https://www.linkedin.com/in/keelie-cadby-967321337/" target="_blank" rel="noreferrer" style={{...btnSecondary,borderColor:t.border,color:t.text,textDecoration:"none"}}>in LinkedIn</a>
+                  <a href={CV_SRC} download style={{...btnSecondary,borderColor:t.border,color:t.text,textDecoration:"none"}}>⬇ Download CV</a>
                   <a href="tel:07391025873" style={{...btnSecondary,borderColor:t.border,color:t.text,textDecoration:"none"}}>📞 Call Me</a>
                 </div>
               </div>
@@ -640,7 +670,7 @@ export default function Portfolio() {
       </main>
 
       <footer style={{...s.footer,borderColor:t.border}}>
-        <p style={{...s.footerText,color:t.muted}}>© 2025 Keelie Cadby · Built with pride</p>
+        <p style={{...s.footerText,color:t.muted}}>© {new Date().getFullYear()} Keelie Cadby · Built with pride</p>
         <p style={{...s.footerText,color:t.muted,marginTop:6,fontSize:12}}>🔑 There's a hidden easter egg on this page — can you find it?</p>
       </footer>
     </div>
@@ -716,7 +746,10 @@ const s={
   expBullet:{display:"flex",gap:12,alignItems:"flex-start",fontSize:15,lineHeight:1.7},
   bulletDot:{display:"block",width:6,height:6,borderRadius:"50%",background:pink,flexShrink:0,marginTop:8},
   cardLine:{marginTop:24,height:1,background:`linear-gradient(to right,${pd}0.45),${pd}0.12),transparent)`},
-  skillsGrid:{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(160px,1fr))",gap:14,marginTop:36},
+  heroPhoto:{width:120,height:120,borderRadius:"50%",objectFit:"cover",border:`3px solid ${pd}0.55)`,boxShadow:`0 0 32px ${pd}0.30)`},
+  topSkillsGrid:{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(180px,1fr))",gap:14,marginTop:16},
+  topSkill:{borderRadius:16,border:`1px solid ${pd}0.35)`,background:pd+"0.16)",padding:"16px 12px",textAlign:"center",fontSize:15,fontWeight:700,color:"#fce7f3"},
+  skillGroups:{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:20,marginTop:28},
   skillBox:{borderRadius:16,border:`1px solid ${pd}0.16)`,background:pd+"0.09)",padding:"14px 12px",textAlign:"center",fontSize:14,fontWeight:500,color:"#fce7f3",backdropFilter:"blur(12px)"},
   achGrid:{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))",gap:20,marginTop:36},
   achCard:{borderRadius:22,border:"1px solid",padding:24,backdropFilter:"blur(14px)",transition:"background .3s"},
@@ -738,6 +771,6 @@ const s={
 
 if(typeof document!=="undefined"&&!document.getElementById("kc-styles")){
   const tag=document.createElement("style");tag.id="kc-styles";
-  tag.textContent=`*{box-sizing:border-box}body{margin:0;cursor:none}@media(max-width:900px){.hero-inner,.two-col,.contact-grid{grid-template-columns:1fr!important}}@media(max-width:640px){[data-desktop-nav]{display:none!important}[data-hamburger]{display:flex!important}[data-contact-top]{display:none!important}.hero-btns{flex-direction:column}.exp-header{flex-direction:column}.exp-meta{align-items:flex-start!important}}`;
+  tag.textContent=`*{box-sizing:border-box}body{margin:0;cursor:none}@media(hover:none){body,body *{cursor:auto!important}}@media(max-width:1100px){[data-desktop-nav]{display:none!important}[data-hamburger]{display:flex!important}}@media(max-width:900px){.hero-inner,.two-col,.contact-grid{grid-template-columns:1fr!important}.tl-line{left:8px!important}.tl-row{justify-content:flex-start!important}.tl-item{width:100%!important;padding:0 0 0 32px!important;text-align:left!important}.tl-dot{display:none}}@media(max-width:640px){[data-contact-top]{display:none!important}.hero-btns{flex-direction:column}.hero-btns a{justify-content:center}.hero-cards{grid-template-columns:1fr 1fr!important}}`;
   document.head.appendChild(tag);
 }
